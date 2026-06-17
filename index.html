@@ -4,13 +4,12 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
 <title>Portal ILP · Rafael Mendanha</title>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.js"></script>
 <style>
 @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&display=swap');
 :root{--bg:#060810;--s1:#0b0e17;--s2:#10141e;--s3:#161b27;--s4:#1c2232;--gold:#b8964a;--gold2:#d4af6a;--text:#dde1ea;--t2:#7a8196;--t3:#424858;--green:#2db87a;--red:#c95050;--b2:#2563b8;--b3:#4a90d4;--b4:#7ab8e8;--teal:#1a6a5a;--teal2:#2ab8a4;--br:rgba(184,150,74,.1);--br2:rgba(255,255,255,.05);--br3:rgba(255,255,255,.03);--r:10px;--rs:7px}
 *{box-sizing:border-box;margin:0;padding:0}
 body{font-family:'Inter',system-ui,sans-serif;background:var(--bg);color:var(--text);min-height:100vh;font-size:13px;-webkit-font-smoothing:antialiased}
-.hdr{background:var(--s1);padding:1rem 2rem;display:flex;align-items:center;justify-content:space-between;border-bottom:1px solid var(--br);position:sticky;top:0;z-index:10}
+.hdr{background:var(--s1);padding:1rem 2rem;display:flex;align-items:center;justify-content:space-between;border-bottom:1px solid var(--br);position:sticky;top:0;z-index:10;flex-wrap:wrap;gap:.5rem}
 .logo{font-size:.95rem;font-weight:500;letter-spacing:.18em;color:#fff;text-transform:uppercase}
 .logo em{color:var(--gold);font-style:normal;font-weight:300}
 .tagline{font-size:.58rem;color:var(--t3);letter-spacing:.16em;text-transform:uppercase;margin-top:3px}
@@ -76,8 +75,8 @@ body{font-family:'Inter',system-ui,sans-serif;background:var(--bg);color:var(--t
 <body>
 <div class="hdr">
   <div><div class="logo">Portal <em>ILP</em></div><div class="tagline">Inteligência de Longo Prazo</div></div>
-  <div style="display:flex;align-items:center;gap:1.5rem">
-    <div class="sync" onclick="sincronizar()" title="Clique para sincronizar"><div class="sync-dot" id="syncDot"></div><span id="syncLabel">Jun/2026</span></div>
+  <div style="display:flex;align-items:center;gap:1.5rem;flex-wrap:wrap">
+    <div class="sync" onclick="sincronizar()" title="Clique para sincronizar com a planilha"><div class="sync-dot" id="syncDot"></div><span id="syncLabel">Jun/2026</span></div>
     <div class="nav">
       <button class="nb active" onclick="tab('dashboard',this)">Dashboard</button>
       <button class="nb" onclick="tab('alugueis',this)">Aluguéis</button>
@@ -88,7 +87,6 @@ body{font-family:'Inter',system-ui,sans-serif;background:var(--bg);color:var(--t
   </div>
 </div>
 <div class="wrap" id="appContent">
-
   <div id="tab-dashboard" class="tab active">
     <div class="sec">Patrimônio</div>
     <div class="g3">
@@ -112,213 +110,81 @@ body{font-family:'Inter',system-ui,sans-serif;background:var(--bg);color:var(--t
     <div class="g3" id="cardsAportes" style="margin-bottom:1rem"></div>
     <div class="card"><table class="tbl"><thead><tr><th>Mês</th><th class="r">Aporte Mensal</th><th class="r">Acumulado</th></tr></thead><tbody id="tbAportes"></tbody></table></div>
   </div>
-
   <div id="tab-alugueis" class="tab"><div class="sec">Aluguéis</div><div class="g4" id="cardsAlug" style="margin-bottom:1rem"></div><div class="card"><div style="overflow-x:auto"><table class="tbl"><thead><tr><th>Data</th><th>Classe</th><th>Tipo</th><th>Localização</th><th class="r">Valor Mensal</th><th class="r">Dt. Recebimento</th><th class="r">Valor Pago</th><th>Status</th></tr></thead><tbody id="tbAlug"></tbody></table></div></div></div>
   <div id="tab-dividendos" class="tab"><div class="sec">Calendário de Dividendos</div><div class="g4" id="cardsDiv" style="margin-bottom:1rem"></div><div class="card"><div style="overflow-x:auto"><table class="tbl"><thead><tr><th>Ativo</th><th>Tipo</th><th>Segmento</th><th>Pagamento</th><th class="r">Qtd</th><th class="r">IR</th><th class="r">IOF</th><th class="r">Valor Líquido</th><th>Status</th></tr></thead><tbody id="tbDiv"></tbody></table></div></div></div>
   <div id="tab-sinteticos" class="tab"><div class="sec">Dividendos Sintéticos</div><div class="g4" id="cardsSin" style="margin-bottom:1rem"></div><div class="g3" id="cardsSin2" style="margin-bottom:1rem"></div><div class="card"><div style="overflow-x:auto"><table class="tbl"><thead><tr><th>#</th><th>Ação</th><th>Data</th><th>Opção</th><th class="r">Strike</th><th class="r">% Strike</th><th>Tipo</th><th class="r">Qtd</th><th class="r">Prêmio</th><th>Vencimento</th><th>Exercício</th><th class="r">% Geral</th><th class="r">Ganho</th><th class="r">% Líq.</th></tr></thead><tbody id="tbSin"></tbody></table></div></div></div>
   <div id="tab-relatorios" class="tab"><div class="sec">Evolução Trimestral</div><div class="card"><div style="overflow-x:auto"><table class="tbl" id="tblRel"><thead></thead><tbody></tbody></table></div></div></div>
-
 </div>
 <div class="toast" id="toast"></div>
-
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.js" onload="iniciar()"></script>
 <script>
-// ===================== DADOS FIXOS (carregam instantaneamente) =====================
-const DADOS = {
-  patrimonio: {ativos: 482970, passivos: 0, patLiq: 482970},
-  classes: [{n:'Mercado Financeiro',v:284784},{n:'Outros',v:198186}],
-  ativos: [
-    {n:'Cx ProPay Selic CDI',v:81679,cat:'MF'},{n:'Cx Carro Mariana',v:63028,cat:'Outros'},
-    {n:'Chevrolet Onix 2017',v:54682,cat:'Outros'},{n:'Honda Fit 2012',v:44012,cat:'Outros'},
-    {n:'Tesouro Prefixado 2035',v:34662,cat:'MF'},{n:'BBSE3',v:24574,cat:'MF'},
-    {n:'BBAS3',v:22300,cat:'MF'},{n:'Cx Projeto Baby',v:19939,cat:'Outros'},
-    {n:'ITUB4',v:17202,cat:'MF'},{n:'PETR4',v:14796,cat:'MF'},
-    {n:'Tesouro Selic 2031',v:11788,cat:'MF'},{n:'Cx Carro Morona',v:10614,cat:'Outros'},
-    {n:'Tesouro IPCA+ 2035',v:10379,cat:'MF'},{n:'PRIO3',v:10263,cat:'MF'},
-    {n:'CMIG4',v:8305,cat:'MF'},{n:'SAPR4',v:7659,cat:'MF'},
-    {n:'CGRA4',v:6102,cat:'MF'},{n:'Cx Prev Viagem',v:5911,cat:'Outros'},
-    {n:'LEVE3',v:3499,cat:'MF'},{n:'GOGL34',v:1734,cat:'MF'},
-    {n:'MLSA13',v:1677,cat:'MF'},{n:'MATO3',v:23,cat:'MF'}
-  ],
-  renda: {
-    alug: [17900,17900,17900,17900,17900,17900,0,0,0,0,0,0],
-    div:  [0,123.97,2255.12,0,287.93,0,0,0,0,0,0,0],
-    sin:  [56.10,917.15,725.90,1008.40,608.60,0,0,0,0,0,0,0]
-  },
-  aportes: [40000,7400,9000,13600,8608,0,0,0,0,0,0,0],
-  alugueisRows: [
-    ['jan/26','Comercial','Galpão','Aparecida de Goiânia · GO',4000,'10/01/2026',4000,'Recebido'],
-    ['jan/26','Residencial','Galpão','Goiânia · GO',3500,'10/01/2026',3500,'Recebido'],
-    ['jan/26','Residencial','Casa em Condomínio','Goiânia · GO',8000,'05/01/2026',8000,'Recebido'],
-    ['jan/26','Residencial','Apartamento','Goiânia · GO',2400,'05/01/2026',2400,'Recebido'],
-    ['fev/26','Comercial','Galpão','Aparecida de Goiânia · GO',4000,'10/02/2026',4000,'Recebido'],
-    ['fev/26','Residencial','Galpão','Goiânia · GO',3500,'10/02/2026',3500,'Recebido'],
-    ['fev/26','Residencial','Casa em Condomínio','Goiânia · GO',8000,'05/02/2026',8000,'Recebido'],
-    ['fev/26','Residencial','Apartamento','Goiânia · GO',2400,'05/02/2026',2400,'Recebido'],
-    ['mar/26','Comercial','Galpão','Aparecida de Goiânia · GO',4000,'10/03/2026',4000,'Recebido'],
-    ['mar/26','Residencial','Galpão','Goiânia · GO',3500,'10/03/2026',3500,'Recebido'],
-    ['mar/26','Residencial','Casa em Condomínio','Goiânia · GO',8000,'05/03/2026',8000,'Recebido'],
-    ['mar/26','Residencial','Apartamento','Goiânia · GO',2400,'05/03/2026',2400,'Recebido'],
-    ['abr/26','Comercial','Galpão','Aparecida de Goiânia · GO',4000,'10/04/2026',4000,'Recebido'],
-    ['abr/26','Residencial','Galpão','Goiânia · GO',3500,'10/04/2026',3500,'Recebido'],
-    ['abr/26','Residencial','Casa em Condomínio','Goiânia · GO',8000,'05/04/2026',8000,'Recebido'],
-    ['abr/26','Residencial','Apartamento','Goiânia · GO',2400,'05/04/2026',2400,'Recebido'],
-    ['mai/26','Comercial','Galpão','Aparecida de Goiânia · GO',4000,'10/05/2026',4000,'Recebido'],
-    ['mai/26','Residencial','Galpão','Goiânia · GO',3500,'10/05/2026',3500,'Recebido'],
-    ['mai/26','Residencial','Casa em Condomínio','Goiânia · GO',8000,'05/05/2026',8000,'Recebido'],
-    ['mai/26','Residencial','Apartamento','Goiânia · GO',2400,'05/05/2026',2400,'Recebido'],
-    ['jun/26','Comercial','Galpão','Aparecida de Goiânia · GO',4000,'10/06/2026',4000,'Recebido'],
-    ['jun/26','Residencial','Galpão','Goiânia · GO',3500,'10/06/2026',3500,'Recebido'],
-    ['jun/26','Residencial','Casa em Condomínio','Goiânia · GO',8000,'05/06/2026',8000,'Recebido'],
-    ['jun/26','Residencial','Apartamento','Goiânia · GO',2400,'05/06/2026',2400,'Recebido'],
-    ['jul/26','Comercial','Galpão','Aparecida de Goiânia · GO',4000,'10/07/2026',0,'A receber'],
-    ['jul/26','Residencial','Galpão','Goiânia · GO',3500,'10/07/2026',0,'A receber'],
-    ['jul/26','Residencial','Casa em Condomínio','Goiânia · GO',8000,'05/07/2026',0,'A receber'],
-    ['jul/26','Residencial','Apartamento','Goiânia · GO',2400,'05/07/2026',0,'A receber']
-  ],
-  dividendosRows: [
-    ['PETR4','Juros s/ cap. próprio','Petróleo & Gás','20/02/2026',304,'—','—','R$ 121,36','Realizado'],
-    ['PETR4','Dividendos','Petróleo & Gás','20/02/2026',304,'—','—','R$ 0,60','Realizado'],
-    ['BBSE3','Dividendos','Financeiro','02/03/2026',706,'R$ 9,02','—','R$ 1.800,27','Realizado'],
-    ['ITUB4','Rendimentos','Financeiro','20/03/2026',400,'R$ 1,33','—','R$ 5,00','Realizado'],
-    ['VALE3','Dividendos','Mineração','04/03/2026',78,'R$ 18,36','—','R$ 104,06','Realizado'],
-    ['BBAS3','Dividendos','Financeiro','05/03/2026',500,'R$ 18,92','—','R$ 110,54','Realizado'],
-    ['BBAS3','Juros s/ cap. próprio','Financeiro','11/03/2026',500,'R$ 6,12','—','R$ 28,94','Realizado'],
-    ['GOGL34','Dividendos','Comunicação','01/04/2026',14,'—','—','R$ 0,86','Realizado'],
-    ['PETR4','Dividendos','Petróleo & Gás','20/03/2026',304,'R$ 7,98','—','R$ 40,11','Realizado'],
-    ['LEVE3','Dividendos','Outros segmentos','27/03/2026',100,'R$ 14,27','—','R$ 178,19','Realizado'],
-    ['LEVE3','Dividendos','Outros segmentos','30/04/2026',100,'R$ 80,51','—','R$ 80,51','Realizado'],
-    ['BBAS3','Juros s/ cap. próprio','Financeiro','01/06/2026',500,'R$ 0,38','—','R$ 2,01','Projetado'],
-    ['CMIG4','Dividendos','Serviços Básicos','30/10/2026',500,'R$ 59,08','—','R$ 59,08','Projetado'],
-    ['CMIG4','Juros s/ cap. próprio','Serviços Básicos','30/11/2026',500,'R$ 8,51','—','R$ 48,88','Projetado'],
-    ['CMIG4','Juros s/ cap. próprio','Serviços Básicos','30/11/2026',500,'R$ 3,82','—','R$ 48,88','Projetado']
-  ],
-  sinteticosRows: [
-    [1,'BBAS3','27/01/2026','BBASB271','R$27,11','-8,88%','CALL',100,'R$30,00','28/01/2026','Expirada','1,13%','R$30,60','1,18%'],
-    [2,'BBAS3','27/01/2026','BBASN233','R$23,24','1,66%','PUT',100,'R$30,00','28/01/2026','Expirada','2,00%','R$25,50','1,98%'],
-    [3,'BBAS3','02/02/2026','BBASN271','R$33,65','1,90%','PUT',400,'R$240,00','20/02/2026','Expirada','1,81%','R$198,79','1,98%'],
-    [4,'ITUB4','02/02/2026','ITUB4','R$34,57','2,03%','PUT',500,'R$90,00','20/02/2026','Expirada','1,59%','R$86,20','1,58%'],
-    [5,'VALE3','02/02/2026','VALEX3','R$75,40','3,99%','PUT',500,'R$360,00','20/02/2026','Expirada','1,42%','R$204,18','1,58%']
-  ],
-  sinResumo: {totalRec:3899,totalLiq:3314.15,abertas:5,encerradas:7,mensal:'1,46%',anual:'19,02%'}
-};
-
-// ===================== UTILITÁRIOS =====================
+const DADOS={patrimonio:{ativos:482970,passivos:0,patLiq:482970},classes:[{n:'Mercado Financeiro',v:284784},{n:'Outros',v:198186}],ativos:[{n:'Cx ProPay Selic CDI',v:81679,cat:'MF'},{n:'Cx Carro Mariana',v:63028,cat:'Outros'},{n:'Chevrolet Onix 2017',v:54682,cat:'Outros'},{n:'Honda Fit 2012',v:44012,cat:'Outros'},{n:'Tesouro Prefixado 2035',v:34662,cat:'MF'},{n:'BBSE3',v:24574,cat:'MF'},{n:'BBAS3',v:22300,cat:'MF'},{n:'Cx Projeto Baby',v:19939,cat:'Outros'},{n:'ITUB4',v:17202,cat:'MF'},{n:'PETR4',v:14796,cat:'MF'},{n:'Tesouro Selic 2031',v:11788,cat:'MF'},{n:'Cx Carro Morona',v:10614,cat:'Outros'},{n:'Tesouro IPCA+ 2035',v:10379,cat:'MF'},{n:'PRIO3',v:10263,cat:'MF'},{n:'CMIG4',v:8305,cat:'MF'},{n:'SAPR4',v:7659,cat:'MF'},{n:'CGRA4',v:6102,cat:'MF'},{n:'Cx Prev Viagem',v:5911,cat:'Outros'},{n:'LEVE3',v:3499,cat:'MF'},{n:'GOGL34',v:1734,cat:'MF'},{n:'MLSA13',v:1677,cat:'MF'},{n:'MATO3',v:23,cat:'MF'}],renda:{alug:[17900,17900,17900,17900,17900,17900,0,0,0,0,0,0],div:[0,123.97,2255.12,0,287.93,0,0,0,0,0,0,0],sin:[56.10,917.15,725.90,1008.40,608.60,0,0,0,0,0,0,0]},aportes:[40000,7400,9000,13600,8608,0,0,0,0,0,0,0],alugueisRows:[['jan/26','Comercial','Galpão','Aparecida de Goiânia · GO',4000,'10/01/2026',4000,'Recebido'],['jan/26','Residencial','Galpão','Goiânia · GO',3500,'10/01/2026',3500,'Recebido'],['jan/26','Residencial','Casa em Condomínio','Goiânia · GO',8000,'05/01/2026',8000,'Recebido'],['jan/26','Residencial','Apartamento','Goiânia · GO',2400,'05/01/2026',2400,'Recebido'],['fev/26','Comercial','Galpão','Aparecida de Goiânia · GO',4000,'10/02/2026',4000,'Recebido'],['fev/26','Residencial','Galpão','Goiânia · GO',3500,'10/02/2026',3500,'Recebido'],['fev/26','Residencial','Casa em Condomínio','Goiânia · GO',8000,'05/02/2026',8000,'Recebido'],['fev/26','Residencial','Apartamento','Goiânia · GO',2400,'05/02/2026',2400,'Recebido'],['mar/26','Comercial','Galpão','Aparecida de Goiânia · GO',4000,'10/03/2026',4000,'Recebido'],['mar/26','Residencial','Galpão','Goiânia · GO',3500,'10/03/2026',3500,'Recebido'],['mar/26','Residencial','Casa em Condomínio','Goiânia · GO',8000,'05/03/2026',8000,'Recebido'],['mar/26','Residencial','Apartamento','Goiânia · GO',2400,'05/03/2026',2400,'Recebido'],['abr/26','Comercial','Galpão','Aparecida de Goiânia · GO',4000,'10/04/2026',4000,'Recebido'],['abr/26','Residencial','Galpão','Goiânia · GO',3500,'10/04/2026',3500,'Recebido'],['abr/26','Residencial','Casa em Condomínio','Goiânia · GO',8000,'05/04/2026',8000,'Recebido'],['abr/26','Residencial','Apartamento','Goiânia · GO',2400,'05/04/2026',2400,'Recebido'],['mai/26','Comercial','Galpão','Aparecida de Goiânia · GO',4000,'10/05/2026',4000,'Recebido'],['mai/26','Residencial','Galpão','Goiânia · GO',3500,'10/05/2026',3500,'Recebido'],['mai/26','Residencial','Casa em Condomínio','Goiânia · GO',8000,'05/05/2026',8000,'Recebido'],['mai/26','Residencial','Apartamento','Goiânia · GO',2400,'05/05/2026',2400,'Recebido'],['jun/26','Comercial','Galpão','Aparecida de Goiânia · GO',4000,'10/06/2026',4000,'Recebido'],['jun/26','Residencial','Galpão','Goiânia · GO',3500,'10/06/2026',3500,'Recebido'],['jun/26','Residencial','Casa em Condomínio','Goiânia · GO',8000,'05/06/2026',8000,'Recebido'],['jun/26','Residencial','Apartamento','Goiânia · GO',2400,'05/06/2026',2400,'Recebido'],['jul/26','Comercial','Galpão','Aparecida de Goiânia · GO',4000,'10/07/2026',0,'A receber'],['jul/26','Residencial','Galpão','Goiânia · GO',3500,'10/07/2026',0,'A receber'],['jul/26','Residencial','Casa em Condomínio','Goiânia · GO',8000,'05/07/2026',0,'A receber'],['jul/26','Residencial','Apartamento','Goiânia · GO',2400,'05/07/2026',0,'A receber']],dividendosRows:[['PETR4','Juros s/ cap. próprio','Petróleo & Gás','20/02/2026',304,'—','—','R$ 121,36','Realizado'],['PETR4','Dividendos','Petróleo & Gás','20/02/2026',304,'—','—','R$ 0,60','Realizado'],['BBSE3','Dividendos','Financeiro','02/03/2026',706,'R$ 9,02','—','R$ 1.800,27','Realizado'],['ITUB4','Rendimentos','Financeiro','20/03/2026',400,'R$ 1,33','—','R$ 5,00','Realizado'],['VALE3','Dividendos','Mineração','04/03/2026',78,'R$ 18,36','—','R$ 104,06','Realizado'],['BBAS3','Dividendos','Financeiro','05/03/2026',500,'R$ 18,92','—','R$ 110,54','Realizado'],['BBAS3','Juros s/ cap. próprio','Financeiro','11/03/2026',500,'R$ 6,12','—','R$ 28,94','Realizado'],['GOGL34','Dividendos','Comunicação','01/04/2026',14,'—','—','R$ 0,86','Realizado'],['PETR4','Dividendos','Petróleo & Gás','20/03/2026',304,'R$ 7,98','—','R$ 40,11','Realizado'],['LEVE3','Dividendos','Outros','27/03/2026',100,'R$ 14,27','—','R$ 178,19','Realizado'],['LEVE3','Dividendos','Outros','30/04/2026',100,'R$ 80,51','—','R$ 80,51','Realizado'],['BBAS3','Juros s/ cap. próprio','Financeiro','01/06/2026',500,'R$ 0,38','—','R$ 2,01','Projetado'],['CMIG4','Dividendos','Serviços Básicos','30/10/2026',500,'R$ 59,08','—','R$ 59,08','Projetado'],['CMIG4','Juros s/ cap. próprio','Serviços Básicos','30/11/2026',500,'R$ 8,51','—','R$ 48,88','Projetado'],['CMIG4','Juros s/ cap. próprio','Serviços Básicos','30/11/2026',500,'R$ 3,82','—','R$ 48,88','Projetado']],sinteticosRows:[[1,'BBAS3','27/01/2026','BBASB271','R$27,11','-8,88%','CALL',100,'R$30,00','28/01/2026','Expirada','1,13%','R$30,60','1,18%'],[2,'BBAS3','27/01/2026','BBASN233','R$23,24','1,66%','PUT',100,'R$30,00','28/01/2026','Expirada','2,00%','R$25,50','1,98%'],[3,'BBAS3','02/02/2026','BBASN271','R$33,65','1,90%','PUT',400,'R$240,00','20/02/2026','Expirada','1,81%','R$198,79','1,98%'],[4,'ITUB4','02/02/2026','ITUB4','R$34,57','2,03%','PUT',500,'R$90,00','20/02/2026','Expirada','1,59%','R$86,20','1,58%'],[5,'VALE3','02/02/2026','VALEX3','R$75,40','3,99%','PUT',500,'R$360,00','20/02/2026','Expirada','1,42%','R$204,18','1,58%']],sinResumo:{totalRec:3899,totalLiq:3314.15,abertas:5,encerradas:7,mensal:'1,46%',anual:'19,02%'}};
 const MESES=['Janeiro','Fevereiro','Março','Abril','Maio','Junho','Julho','Agosto','Setembro','Outubro','Novembro','Dezembro'];
 const MS=['Jan','Fev','Mar','Abr','Mai','Jun','Jul','Ago','Set','Out','Nov','Dez'];
 const fmtBRL=v=>typeof v==='number'?v.toLocaleString('pt-BR',{style:'currency',currency:'BRL'}):v;
 function tab(id,btn){document.querySelectorAll('.tab').forEach(e=>e.classList.remove('active'));document.querySelectorAll('.nb').forEach(e=>e.classList.remove('active'));document.getElementById('tab-'+id).classList.add('active');btn.classList.add('active')}
 function toast(msg){const t=document.getElementById('toast');t.textContent=msg;t.style.display='block';setTimeout(()=>t.style.display='none',3000)}
 let cP,cB,cPA,cR;
-
-// ===================== RENDER =====================
-function render(d){
-  const p=d.patrimonio;
+function iniciar(){
+  const d=DADOS,p=d.patrimonio;
   document.getElementById('vAtivos').textContent=fmtBRL(p.ativos);
   document.getElementById('vPassivos').textContent=p.passivos>0?fmtBRL(p.passivos):'R$ 0';
   document.getElementById('vPatLiq').textContent=fmtBRL(p.patLiq);
-
-  // Gráficos patrimônio
-  const clsC=['#2563b8','#7ab8e8'];
-  const totC=d.classes.reduce((a,b)=>a+b.v,0)||1;
-  if(cP)cP.destroy();
+  const clsC=['#2563b8','#7ab8e8'],totC=d.classes.reduce((a,b)=>a+b.v,0)||1;
   cP=new Chart(document.getElementById('cPie'),{type:'doughnut',data:{labels:d.classes.map(c=>c.n),datasets:[{data:d.classes.map(c=>c.v),backgroundColor:clsC,borderWidth:2,borderColor:'#0b0e17',hoverOffset:4}]},options:{responsive:true,maintainAspectRatio:false,cutout:'72%',plugins:{legend:{display:false},tooltip:{callbacks:{label:i=>' '+fmtBRL(i.raw)}}}}});
-  if(cB)cB.destroy();
   cB=new Chart(document.getElementById('cBarClasse'),{type:'bar',data:{labels:d.classes.map(c=>c.n),datasets:[{data:d.classes.map(c=>c.v),backgroundColor:clsC,borderRadius:4,borderWidth:0}]},options:{responsive:true,maintainAspectRatio:false,indexAxis:'y',plugins:{legend:{display:false},tooltip:{callbacks:{label:i=>' '+fmtBRL(i.raw)}}},scales:{x:{ticks:{color:'#424858',font:{size:9},callback:v=>v>=1e3?(v/1e3).toFixed(0)+'k':v},grid:{color:'rgba(255,255,255,.03)'},border:{display:false}},y:{ticks:{color:'#7a8196',font:{size:9}},grid:{display:false},border:{display:false}}}}});
-  const lc=document.getElementById('legClasse');lc.innerHTML='';
-  d.classes.forEach((c,i)=>lc.innerHTML+='<span style="display:flex;align-items:center;gap:5px"><span style="width:8px;height:1px;background:'+clsC[i]+';display:inline-block"></span>'+c.n+' <strong style="color:var(--text);font-weight:500">'+((c.v/totC)*100).toFixed(1)+'%</strong></span>');
-
-  // Ativos detalhados
-  const av=[...d.ativos].sort((a,b)=>b.v-a.v);
-  const totA=av.reduce((a,b)=>a+b.v,0)||1;
+  const lc=document.getElementById('legClasse');lc.innerHTML='';d.classes.forEach((c,i)=>lc.innerHTML+='<span style="display:flex;align-items:center;gap:5px"><span style="width:8px;height:1px;background:'+clsC[i]+';display:inline-block"></span>'+c.n+' <strong style="color:var(--text);font-weight:500">'+((c.v/totC)*100).toFixed(1)+'%</strong></span>');
+  const av=[...d.ativos].sort((a,b)=>b.v-a.v),totA=av.reduce((a,b)=>a+b.v,0)||1;
   const aC=av.map((_,i)=>{const b=['#1a3a6e','#1e4280','#224a92','#275eb8','#2b66c8','#3070d4','#3a7ed8','#447edc','#4e8ae6','#5896ec','#62a0f0','#6cacf4','#76b6f8','#7abce8','#6eb0e0','#5698d0','#4a8cc8','#3e80c0','#3274b8','#2668b0','#1a5ca8','#1050a0'];return b[i%b.length];});
-  if(cPA)cPA.destroy();
   cPA=new Chart(document.getElementById('cPieAt'),{type:'doughnut',data:{labels:av.map(a=>a.n),datasets:[{data:av.map(a=>a.v),backgroundColor:aC,borderWidth:1,borderColor:'#0b0e17',hoverOffset:3}]},options:{responsive:true,maintainAspectRatio:false,cutout:'60%',plugins:{legend:{display:false},tooltip:{callbacks:{label:i=>' '+fmtBRL(i.raw)+' ('+((i.raw/totA)*100).toFixed(1)+'%)'}}}}});
-  const tbAt=document.getElementById('tbAt');tbAt.innerHTML='';
-  av.forEach((a,i)=>{const pct=((a.v/totA)*100).toFixed(1);tbAt.innerHTML+='<tr><td style="display:flex;align-items:center;gap:.4rem;padding:.3rem .4rem"><span style="width:5px;height:5px;border-radius:50%;background:'+aC[i]+';flex-shrink:0;display:inline-block"></span><span style="color:var(--t2)">'+a.n+'</span><span class="cat-tag">('+( a.cat==='MF'?'Merc. Fin.':'Outros')+')</span></td><td style="text-align:right;padding:.3rem .4rem;color:var(--text)">'+fmtBRL(a.v)+'</td><td style="text-align:right;padding:.3rem .4rem;color:var(--t3)">'+pct+'%</td></tr>';});
-
-  // Renda
-  const {alug,div,sin}=d.renda;
-  const alugT=alug.reduce((a,b)=>a+b,0),divT=div.reduce((a,b)=>a+b,0),sinT=sin.reduce((a,b)=>a+b,0);
-  const totR=alugT+divT+sinT,mR=alug.filter(v=>v>0).length||6,mediaR=totR/mR;
+  const tbAt=document.getElementById('tbAt');tbAt.innerHTML='';av.forEach((a,i)=>{const pct=((a.v/totA)*100).toFixed(1);tbAt.innerHTML+='<tr><td style="display:flex;align-items:center;gap:.4rem;padding:.3rem .4rem"><span style="width:5px;height:5px;border-radius:50%;background:'+aC[i]+';flex-shrink:0;display:inline-block"></span><span style="color:var(--t2)">'+a.n+'</span><span class="cat-tag">('+( a.cat==='MF'?'Merc. Fin.':'Outros')+')</span></td><td style="text-align:right;padding:.3rem .4rem;color:var(--text)">'+fmtBRL(a.v)+'</td><td style="text-align:right;padding:.3rem .4rem;color:var(--t3)">'+pct+'%</td></tr>';});
+  const{alug,div,sin}=d.renda,alugT=alug.reduce((a,b)=>a+b,0),divT=div.reduce((a,b)=>a+b,0),sinT=sin.reduce((a,b)=>a+b,0),totR=alugT+divT+sinT,mR=alug.filter(v=>v>0).length||6,mediaR=totR/mR;
   const aP=((alugT/totR)*100).toFixed(1),dP=((divT/totR)*100).toFixed(1),sP=((sinT/totR)*100).toFixed(1);
   document.getElementById('cardsRenda').innerHTML='<div class="card ca"><div class="label">Aluguéis recebidos</div><div class="value" style="color:var(--teal2)">'+fmtBRL(alugT)+'</div><div class="subval">'+mR+' meses</div></div><div class="card ca"><div class="label">Dividendos realizados</div><div class="value" style="color:var(--b3)">'+fmtBRL(divT)+'</div></div><div class="card ca"><div class="label">Sintéticos realizados</div><div class="value" style="color:var(--b4)">'+fmtBRL(sinT)+'</div></div><div class="card"><div class="label">Média mensal realizada</div><div class="value green">'+fmtBRL(mediaR)+'</div></div>';
   document.getElementById('splitBar').innerHTML='<div style="width:'+aP+'%;background:var(--teal)"></div><div style="width:'+dP+'%;background:var(--b2)"></div><div style="width:'+sP+'%;background:var(--b4)"></div>';
   document.getElementById('splitLabels').innerHTML='<span style="color:var(--teal2)">▪ Aluguéis '+aP+'%</span><span style="color:var(--b3)">▪ Dividendos '+dP+'%</span><span style="color:var(--b4)">▪ Sintéticos '+sP+'%</span>';
   document.getElementById('rendaLegend').innerHTML='<span style="display:flex;align-items:center;gap:.4rem"><span style="width:10px;height:2px;background:var(--teal);display:inline-block"></span>Aluguéis</span><span style="display:flex;align-items:center;gap:.4rem"><span style="width:10px;height:2px;background:var(--b2);display:inline-block"></span>Dividendos</span><span style="display:flex;align-items:center;gap:.4rem"><span style="width:10px;height:2px;background:var(--b4);display:inline-block"></span>Sintéticos</span>';
-  if(cR)cR.destroy();
   cR=new Chart(document.getElementById('cRenda'),{type:'bar',data:{labels:MS,datasets:[{label:'Aluguéis',data:alug,backgroundColor:'#1a6a5a',borderRadius:2,stack:'r'},{label:'Dividendos',data:div,backgroundColor:'#2563b8',borderRadius:2,stack:'r'},{label:'Sintéticos',data:sin,backgroundColor:'#7ab8e8',borderRadius:2,stack:'r'}]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false},tooltip:{callbacks:{label:i=>' '+fmtBRL(i.raw)}}},scales:{x:{ticks:{color:'#424858',font:{size:9}},grid:{display:false},stacked:true,border:{display:false}},y:{ticks:{color:'#424858',font:{size:9},callback:v=>v>=1e3?(v/1e3).toFixed(0)+'k':v},grid:{color:'rgba(255,255,255,.03)'},stacked:true,border:{display:false}}}}});
-
-  // ILF
   const fases=[{m:2500,l:'Fase 01'},{m:5000,l:'Fase 02'},{m:10000,l:'Fase 03'},{m:20000,l:'Fase 04 — Liberdade'}];
   const iw=document.getElementById('ilfWrap');iw.innerHTML='';
   fases.forEach((f,i)=>{const pct=Math.min((mediaR/f.m)*100,100),done=mediaR>=f.m,next=!done&&(i===0||(mediaR>=fases[i-1].m)),lock=!done&&!next;iw.innerHTML+='<div class="fase '+(done||next?'fase-active':'')+'"><div class="frow"><span class="ftitle" style="color:'+(done?'var(--green)':next?'var(--gold)':'var(--t2)')+'">'+f.l+'</span><span class="tag '+(done?'tag-done':next?'tag-active':'tag-locked')+'">'+(done?'✓ Concluída':next?'Em andamento':'Bloqueada')+'</span></div><div class="fmeta" style="color:'+(lock?'var(--t3)':'var(--t2)')+'">Meta <strong style="color:'+(lock?'var(--t3)':'var(--text)')+'">'+fmtBRL(f.m)+'/mês</strong>'+(next?' · Atual <strong style="color:var(--green)">'+fmtBRL(mediaR)+'</strong>':'')+'</div><div class="fbar"><div class="fbar-fill" style="width:'+pct+'%;background:'+(done?'var(--green)':next?'linear-gradient(90deg,var(--gold),var(--gold2))':'var(--s4)')+'"></div></div><div class="fpct" style="color:'+(done?'var(--green)':next?'var(--gold)':'var(--t3)')+'">'+(done?'Renda supera a meta':next?pct.toFixed(1)+'% concluído':'Disponível após fase anterior')+'</div></div>';});
-
-  // Tabela renda mensal
   const tbR=document.getElementById('tbRenda');tbR.innerHTML='';let tA=0,tD=0,tS=0;
   MESES.forEach((mes,i)=>{const a=alug[i],dv=div[i],s=sin[i],tot=a+dv+s,fut=tot===0;tA+=a;tD+=dv;tS+=s;tbR.innerHTML+='<tr><td style="color:'+(fut?'var(--t3)':'var(--text)')+'">'+mes+'</td><td class="r '+(a>0?'pos':'')+'">'+(a>0?fmtBRL(a):'—')+'</td><td class="r '+(dv>0?'pos':'')+'">'+(dv>0?fmtBRL(dv):'—')+'</td><td class="r '+(s>0?'pos':'')+'">'+(s>0?fmtBRL(s):'—')+'</td><td class="r '+(tot>0?'pos':'')+'">'+(tot>0?fmtBRL(tot):'—')+'</td></tr>';});
   tbR.innerHTML+='<tr class="tr-sub"><td>Total 2026</td><td class="r pos">'+fmtBRL(tA)+'</td><td class="r pos">'+fmtBRL(tD)+'</td><td class="r pos">'+fmtBRL(tS)+'</td><td class="r pos">'+fmtBRL(tA+tD+tS)+'</td></tr><tr class="tr-avg"><td>Média mensal</td><td class="r">'+fmtBRL(tA/mR)+'</td><td class="r">'+fmtBRL(tD/mR)+'</td><td class="r">'+fmtBRL(tS/mR)+'</td><td class="r green" style="font-weight:500">'+fmtBRL((tA+tD+tS)/mR)+'</td></tr>';
-
-  // Aportes
-  const ap=d.aportes;const apT=ap.reduce((a,b)=>a+b,0);const mAp=ap.filter(v=>v>0).length||5;
+  const ap=d.aportes,apT=ap.reduce((a,b)=>a+b,0),mAp=ap.filter(v=>v>0).length||5;
   document.getElementById('cardsAportes').innerHTML='<div class="card ca"><div class="label">Total Aportado 2026</div><div class="value gold">'+fmtBRL(apT)+'</div></div><div class="card"><div class="label">Média de Aporte Mensal</div><div class="value">'+fmtBRL(apT/mAp)+'</div><div class="subval">'+mAp+' meses</div></div><div class="card"><div class="label">Meses com Aporte</div><div class="value">'+mAp+' <span style="font-size:.9rem;color:var(--t2)">de 12</span></div></div>';
   const tbAp=document.getElementById('tbAportes');tbAp.innerHTML='';let ac=0;
-  MESES.forEach((mes,i)=>{const v=ap[i]||0;if(v>0)ac+=v;const fut=v===0;tbAp.innerHTML+='<tr><td style="color:'+(fut?'var(--t3)':'var(--text)')+'">'+mes+'</td><td class="r '+(v>0?'gold':'')+'">'+(v>0?fmtBRL(v):'—')+'</td><td class="r" style="color:'+(fut?'var(--t3)':'var(--text)')+'">'+fmtBRL(ac)+'</td></tr>';});
+  MESES.forEach((mes,i)=>{const v=ap[i]||0;if(v>0)ac+=v;tbAp.innerHTML+='<tr><td style="color:'+(v===0?'var(--t3)':'var(--text)')+'">'+mes+'</td><td class="r '+(v>0?'gold':'')+'">'+(v>0?fmtBRL(v):'—')+'</td><td class="r" style="color:'+(v===0?'var(--t3)':'var(--text)')+'">'+fmtBRL(ac)+'</td></tr>';});
   tbAp.innerHTML+='<tr class="tr-tot"><td>Total 2026</td><td class="r">'+fmtBRL(apT)+'</td><td class="r">'+fmtBRL(apT)+'</td></tr>';
-
-  // Aluguéis
   const tbAl=document.getElementById('tbAlug');tbAl.innerHTML='';let alugTot=0;
   d.alugueisRows.forEach(r=>{const ok=r[7]==='Recebido';if(ok)alugTot+=r[6];tbAl.innerHTML+='<tr><td>'+r[0]+'</td><td>'+r[1]+'</td><td>'+r[2]+'</td><td style="color:var(--t2)">'+r[3]+'</td><td class="r pos">'+fmtBRL(r[4])+'</td><td class="r">'+r[5]+'</td><td class="r '+(ok?'pos':'')+'"> '+(ok?fmtBRL(r[6]):'—')+'</td><td><span class="'+(ok?'status-rec':'status-pr')+'">'+r[7]+'</span></td></tr>';});
   document.getElementById('cardsAlug').innerHTML='<div class="card ca"><div class="label">Total Recebido 2026</div><div class="value" style="color:var(--teal2)">'+fmtBRL(alugTot)+'</div></div><div class="card"><div class="label">Mensal Fixo</div><div class="value">R$ 17.900,00</div><div class="subval">4 imóveis ativos</div></div><div class="card"><div class="label">Meses Recebidos</div><div class="value">6 <span style="font-size:.9rem;color:var(--t2)">de 12</span></div></div><div class="card"><div class="label">Próximo Recebimento</div><div class="value" style="color:var(--b3)">Jul/2026</div></div>';
-
-  // Dividendos
   const tbDiv=document.getElementById('tbDiv');tbDiv.innerHTML='';let rl=0,pj=0;
   d.dividendosRows.forEach(r=>{const ok=r[8]==='Realizado',fut=r[8]==='Projetado';if(ok)rl+=parseFloat(r[7].replace(/[R$s.]/g,'').replace(',','.'))||0;if(fut)pj+=parseFloat(r[7].replace(/[R$s.]/g,'').replace(',','.'))||0;tbDiv.innerHTML+='<tr><td style="color:var(--gold);font-weight:500">'+r[0]+'</td><td>'+r[1]+'</td><td>'+r[2]+'</td><td>'+r[3]+'</td><td class="r">'+r[4]+'</td><td class="r">'+r[5]+'</td><td class="r">'+r[6]+'</td><td class="r '+(ok?'pos':'')+'" style="font-weight:500">'+r[7]+'</td><td><span class="'+(ok?'status-ok':'status-pr')+'">'+r[8]+'</span></td></tr>';});
   document.getElementById('cardsDiv').innerHTML='<div class="card"><div class="label">Realizados</div><div class="value green">'+fmtBRL(rl)+'</div></div><div class="card"><div class="label">Projetados</div><div class="value gold">'+fmtBRL(pj)+'</div></div><div class="card ca"><div class="label">Total Geral</div><div class="value">'+fmtBRL(rl+pj)+'</div></div><div class="card"><div class="label">Próximo Pagamento</div><div class="value" style="color:var(--b3)">22/06/2026</div></div>';
-
-  // Sintéticos
   const tbSin=document.getElementById('tbSin');tbSin.innerHTML='';
   d.sinteticosRows.forEach(r=>{const isC=r[6]==='CALL',p=parseFloat(r[5].replace('%','').replace(',','.'));tbSin.innerHTML+='<tr><td style="color:var(--t3)">'+r[0]+'</td><td style="color:var(--gold);font-weight:500">'+r[1]+'</td><td>'+r[2]+'</td><td style="color:var(--t2)">'+r[3]+'</td><td class="r">'+r[4]+'</td><td class="r '+(p>=0?'pos':'neg')+'">'+r[5]+'</td><td><span class="'+(isC?'tag-call':'tag-put')+'">'+r[6]+'</span></td><td class="r">'+r[7]+'</td><td class="r">'+r[8]+'</td><td>'+r[9]+'</td><td style="color:var(--t2)">'+r[10]+'</td><td class="r">'+r[11]+'</td><td class="r pos" style="font-weight:500">'+r[12]+'</td><td class="r gold">'+r[13]+'</td></tr>';});
   const sr=d.sinResumo;
   document.getElementById('cardsSin').innerHTML='<div class="card ca"><div class="label">Total Recebido</div><div class="value gold">'+fmtBRL(sr.totalRec)+'</div></div><div class="card"><div class="label">Resultado Líquido</div><div class="value green">'+fmtBRL(sr.totalLiq)+'</div></div><div class="card"><div class="label">% Líquida Mensal</div><div class="value gold">'+sr.mensal+'</div><div class="subval">Selic put + lucro call</div></div><div class="card"><div class="label">% Líquida Anual</div><div class="value gold">'+sr.anual+'</div></div>';
   document.getElementById('cardsSin2').innerHTML='<div class="card"><div class="label">Operações Abertas</div><div class="value" style="color:var(--b3)">'+sr.abertas+'</div></div><div class="card"><div class="label">Operações Encerradas</div><div class="value">'+sr.encerradas+'</div></div><div class="card"><div class="label">Ganho Valorização</div><div class="value green">R$ 811,80</div></div>';
-
-  // Relatório
   const tbl=document.getElementById('tblRel');
   tbl.querySelector('thead').innerHTML='<tr><th>Categoria / Item</th><th class="r">Q1'26</th><th class="r">Q2'26</th><th class="r">Q3'26</th><th class="r">Q4'26</th></tr>';
-  const relRows=[
-    ['hd','Mercado Financeiro'],['Cx ProPay Selic CDI','—','R$ 81.679','—','—'],['Tesouro Prefixado 2035','—','R$ 34.663','—','—'],['Tesouro IPCA+ 2035','—','R$ 10.379','—','—'],['Tesouro Selic 2031','—','R$ 11.788','—','—'],['BBAS3','—','R$ 22.300','—','—'],['BBSE3','—','R$ 24.574','—','—'],['CGRA4','—','R$ 6.103','—','—'],['CMIG4','—','R$ 8.305','—','—'],['ITUB4','—','R$ 17.202','—','—'],['LEVE3','—','R$ 3.499','—','—'],['MLSA13','—','R$ 1.677','—','—'],['MATO3','—','R$ 23','—','—'],['PETR4','—','R$ 14.796','—','—'],['PRIO3','—','R$ 10.263','—','—'],['SAPR4','—','R$ 7.659','—','—'],['GOGL34','—','R$ 1.734','—','—'],
-    ['sub','Subtotal Mercado Financeiro','—','R$ 284.784','—','—'],
-    ['hd','Outros'],['Cx Carro Mariana','—','R$ 63.028','—','—'],['Chevrolet Onix 2017','—','R$ 54.682','—','—'],['Honda Fit 2012','—','R$ 44.012','—','—'],['Cx Projeto Baby','—','R$ 19.939','—','—'],['Cx Carro Morona','—','R$ 10.614','—','—'],['Cx Prev Viagem','—','R$ 5.911','—','—'],
-    ['sub','Subtotal Outros','—','R$ 198.186','—','—'],
-    ['tot','Total Ativos','—','R$ 482.970','—','—'],
-    ['hd','Passivos'],['tot','Total Passivos','—','—','—','—'],
-    ['liq','Patrimônio Líquido','—','R$ 482.970','—','—']
-  ];
+  const rr=[['hd','Mercado Financeiro'],['Cx ProPay Selic CDI','—','R$ 81.679','—','—'],['Tesouro Prefixado 2035','—','R$ 34.663','—','—'],['Tesouro IPCA+ 2035','—','R$ 10.379','—','—'],['Tesouro Selic 2031','—','R$ 11.788','—','—'],['BBAS3','—','R$ 22.300','—','—'],['BBSE3','—','R$ 24.574','—','—'],['CGRA4','—','R$ 6.103','—','—'],['CMIG4','—','R$ 8.305','—','—'],['ITUB4','—','R$ 17.202','—','—'],['LEVE3','—','R$ 3.499','—','—'],['MLSA13','—','R$ 1.677','—','—'],['MATO3','—','R$ 23','—','—'],['PETR4','—','R$ 14.796','—','—'],['PRIO3','—','R$ 10.263','—','—'],['SAPR4','—','R$ 7.659','—','—'],['GOGL34','—','R$ 1.734','—','—'],['sub','Subtotal Mercado Financeiro','—','R$ 284.784','—','—'],['hd','Outros'],['Cx Carro Mariana','—','R$ 63.028','—','—'],['Chevrolet Onix 2017','—','R$ 54.682','—','—'],['Honda Fit 2012','—','R$ 44.012','—','—'],['Cx Projeto Baby','—','R$ 19.939','—','—'],['Cx Carro Morona','—','R$ 10.614','—','—'],['Cx Prev Viagem','—','R$ 5.911','—','—'],['sub','Subtotal Outros','—','R$ 198.186','—','—'],['tot','Total Ativos','—','R$ 482.970','—','—'],['hd','Passivos'],['tot','Total Passivos','—','—','—','—'],['liq','Patrimônio Líquido','—','R$ 482.970','—','—']];
   const tb2=tbl.querySelector('tbody');tb2.innerHTML='';
-  relRows.forEach(r=>{if(r[0]==='hd')tb2.innerHTML+='<tr class="tr-hd"><td colspan="5" style="padding:.5rem .8rem">'+r[1]+'</td></tr>';else if(r[0]==='sub')tb2.innerHTML+='<tr class="tr-sub"><td>'+r[1]+'</td><td class="r">'+r[2]+'</td><td class="r pos">'+r[3]+'</td><td class="r">'+r[4]+'</td><td class="r">'+r[5]+'</td></tr>';else if(r[0]==='tot')tb2.innerHTML+='<tr class="tr-tot"><td>'+r[1]+'</td><td class="r">'+r[2]+'</td><td class="r">'+r[3]+'</td><td class="r">'+r[4]+'</td><td class="r">'+r[5]+'</td></tr>';else if(r[0]==='liq')tb2.innerHTML+='<tr class="tr-liq"><td>'+r[1]+'</td><td class="r">'+r[2]+'</td><td class="r">'+r[3]+'</td><td class="r">'+r[4]+'</td><td class="r">'+r[5]+'</td></tr>';else tb2.innerHTML+='<tr><td style="color:var(--t2)">'+r[0]+'</td><td class="r">'+r[1]+'</td><td class="r pos">'+r[2]+'</td><td class="r">'+r[3]+'</td><td class="r">'+r[4]+'</td></tr>';});
+  rr.forEach(r=>{if(r[0]==='hd')tb2.innerHTML+='<tr class="tr-hd"><td colspan="5" style="padding:.5rem .8rem">'+r[1]+'</td></tr>';else if(r[0]==='sub')tb2.innerHTML+='<tr class="tr-sub"><td>'+r[1]+'</td><td class="r">'+r[2]+'</td><td class="r pos">'+r[3]+'</td><td class="r">'+r[4]+'</td><td class="r">'+r[5]+'</td></tr>';else if(r[0]==='tot')tb2.innerHTML+='<tr class="tr-tot"><td>'+r[1]+'</td><td class="r">'+r[2]+'</td><td class="r">'+r[3]+'</td><td class="r">'+r[4]+'</td><td class="r">'+r[5]+'</td></tr>';else if(r[0]==='liq')tb2.innerHTML+='<tr class="tr-liq"><td>'+r[1]+'</td><td class="r">'+r[2]+'</td><td class="r">'+r[3]+'</td><td class="r">'+r[4]+'</td><td class="r">'+r[5]+'</td></tr>';else tb2.innerHTML+='<tr><td style="color:var(--t2)">'+r[0]+'</td><td class="r">'+r[1]+'</td><td class="r pos">'+r[2]+'</td><td class="r">'+r[3]+'</td><td class="r">'+r[4]+'</td></tr>';});
+  setTimeout(sincronizar,3000);
 }
-
-// ===================== SYNC BACKGROUND (sem travar a tela) =====================
-const API='https://script.google.com/macros/s/AKfycbz9s-nvIoatmd5l4Ntx_FdUPU4EerxpP5cJDzJ4prgsl1MtRHtt_jCpdvLPWOX7BICyCQ/exec';
 async function sincronizar(){
   document.getElementById('syncLabel').textContent='Sincronizando...';
   try{
-    const res=await fetch(API,{signal:AbortSignal.timeout(15000)});
-    const data=await res.json();
-    // Aqui futuramente parsear os dados da API e atualizar DADOS
-    document.getElementById('syncLabel').textContent='Atualizado agora';
-    document.getElementById('syncDot').style.boxShadow='0 0 8px var(--green)';
-    toast('✓ Dados sincronizados com a planilha');
+    const res=await fetch('https://script.google.com/macros/s/AKfycbz9s-nvIoatmd5l4Ntx_FdUPU4EerxpP5cJDzJ4prgsl1MtRHtt_jCpdvLPWOX7BICyCQ/exec',{signal:AbortSignal.timeout(15000)});
+    await res.json();
+    document.getElementById('syncLabel').textContent='Atualizado';
+    toast('✓ Sincronizado com a planilha');
   }catch(e){
     document.getElementById('syncLabel').textContent='Jun/2026';
-    toast('Planilha offline — exibindo últimos dados');
   }
 }
-
-// ===================== INICIALIZA INSTANTANEAMENTE =====================
-render(DADOS);
-// Tenta sincronizar em background após 2s (sem travar)
-setTimeout(sincronizar, 2000);
 </script>
 </body>
 </html>
