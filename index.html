@@ -3,22 +3,22 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
-<title>Portal ILP · Rafael Mendanha</title>
+<title>Portal ILP - Rafael Mendanha</title>
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js"></script>
 <style>
-@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&display=swap');
-:root{--bg:#060810;--s1:#0b0e17;--s2:#10141e;--s3:#161b27;--s4:#1c2232;--gold:#b8964a;--gold2:#d4af6a;--text:#dde1ea;--t2:#7a8196;--t3:#424858;--green:#2db87a;--red:#c95050;--b2:#2563b8;--b3:#4a90d4;--b4:#7ab8e8;--teal:#1a6a5a;--teal2:#2ab8a4;--br:rgba(184,150,74,.1);--br2:rgba(255,255,255,.05);--br3:rgba(255,255,255,.03);--r:10px;--rs:7px}
+:root{--bg:#060810;--s1:#0b0e17;--s2:#10141e;--s3:#161b27;--gold:#b8964a;--gold2:#d4af6a;--text:#dde1ea;--t2:#7a8196;--t3:#424858;--green:#2db87a;--red:#c95050;--b2:#2563b8;--b3:#4a90d4;--b4:#7ab8e8;--teal:#1a6a5a;--teal2:#2ab8a4;--br:rgba(184,150,74,.1);--br2:rgba(255,255,255,.05);--br3:rgba(255,255,255,.03);--r:10px;--rs:7px}
 *{box-sizing:border-box;margin:0;padding:0}
-body{font-family:'Inter',system-ui,sans-serif;background:var(--bg);color:var(--text);min-height:100vh;font-size:13px;-webkit-font-smoothing:antialiased}
+body{font-family:system-ui,sans-serif;background:var(--bg);color:var(--text);min-height:100vh;font-size:13px}
 .hdr{background:var(--s1);padding:1rem 2rem;display:flex;align-items:center;justify-content:space-between;border-bottom:1px solid var(--br);position:sticky;top:0;z-index:10;flex-wrap:wrap;gap:.5rem}
 .logo{font-size:.95rem;font-weight:500;letter-spacing:.18em;color:#fff;text-transform:uppercase}
 .logo em{color:var(--gold);font-style:normal;font-weight:300}
 .tagline{font-size:.58rem;color:var(--t3);letter-spacing:.16em;text-transform:uppercase;margin-top:3px}
 .nav{display:flex;gap:.25rem;flex-wrap:wrap}
-.nb{background:transparent;border:none;color:var(--t3);padding:.4rem .85rem;border-radius:var(--rs);cursor:pointer;font-size:.66rem;letter-spacing:.08em;text-transform:uppercase;font-family:'Inter',sans-serif;transition:all .25s;font-weight:500}
+.nb{background:transparent;border:none;color:var(--t3);padding:.4rem .85rem;border-radius:var(--rs);cursor:pointer;font-size:.66rem;letter-spacing:.08em;text-transform:uppercase;transition:all .25s;font-weight:500}
 .nb:hover{color:var(--gold2);background:rgba(184,150,74,.06)}
 .nb.active{color:var(--gold);background:rgba(184,150,74,.1);border-bottom:1px solid var(--gold)}
 .sync{font-size:.6rem;color:var(--t3);display:flex;align-items:center;gap:.4rem;cursor:pointer}
-.sync-dot{width:6px;height:6px;border-radius:50%;background:var(--green);box-shadow:0 0 6px var(--green)}
+.dot{width:6px;height:6px;border-radius:50%;background:var(--green);box-shadow:0 0 6px var(--green)}
 .wrap{padding:1.5rem 2rem;max-width:1480px;margin:0 auto}
 .tab{display:none}.tab.active{display:block}
 .g2{display:grid;grid-template-columns:repeat(auto-fit,minmax(300px,1fr));gap:1rem;margin-bottom:1rem}
@@ -26,166 +26,220 @@ body{font-family:'Inter',system-ui,sans-serif;background:var(--bg);color:var(--t
 .g4{display:grid;grid-template-columns:repeat(auto-fit,minmax(170px,1fr));gap:1rem;margin-bottom:1rem}
 .card{background:var(--s1);border:1px solid var(--br2);border-radius:var(--r);padding:1.25rem 1.4rem}
 .ca{border-color:var(--br)}
-.label{font-size:.58rem;font-weight:600;letter-spacing:.12em;text-transform:uppercase;color:var(--t3);margin-bottom:.5rem}
-.value{font-size:1.45rem;font-weight:300;color:var(--text);line-height:1}
-.value.lg{font-size:1.75rem}
-.subval{font-size:.67rem;color:var(--t3);margin-top:.35rem}
+.lbl{font-size:.58rem;font-weight:600;letter-spacing:.12em;text-transform:uppercase;color:var(--t3);margin-bottom:.5rem}
+.val{font-size:1.45rem;font-weight:300;color:var(--text);line-height:1}
+.val.lg{font-size:1.75rem}
+.sub{font-size:.67rem;color:var(--t3);margin-top:.35rem}
 .gold{color:var(--gold)}.green{color:var(--green)}.red{color:var(--red)}
 .sec{font-size:.58rem;font-weight:600;letter-spacing:.18em;text-transform:uppercase;color:var(--t3);margin:1.6rem 0 .9rem;display:flex;align-items:center;gap:.8rem}
-.sec::before{content:'';width:16px;height:1px;background:var(--gold);opacity:.6}
-.sec::after{content:'';flex:1;height:1px;background:var(--br2)}
-.cw{position:relative;width:100%}
-.atv-tbl{width:100%;border-collapse:collapse;font-size:.68rem}
-.atv-tbl td{padding:.3rem .4rem;border-bottom:1px solid var(--br3);vertical-align:middle}
+.sec::before{content:"";width:16px;height:1px;background:var(--gold);opacity:.6}
+.sec::after{content:"";flex:1;height:1px;background:var(--br2)}
+.atbl{width:100%;border-collapse:collapse;font-size:.68rem}
+.atbl td{padding:.3rem .4rem;border-bottom:1px solid var(--br3);vertical-align:middle}
 .sbar{height:4px;border-radius:2px;overflow:hidden;display:flex;margin:.65rem 0 .4rem}
-.slabs{display:flex;justify-content:space-between;font-size:.61rem;gap:.5rem;flex-wrap:wrap}
-.ilf-wrap{display:flex;flex-direction:column;gap:.5rem;margin-top:.5rem}
+.slbs{display:flex;justify-content:space-between;font-size:.61rem;gap:.5rem;flex-wrap:wrap}
+.ilf{display:flex;flex-direction:column;gap:.5rem;margin-top:.5rem}
 .fase{border-radius:var(--rs);padding:.85rem 1rem;border:1px solid var(--br3);background:var(--s2)}
-.fase-active{border-color:rgba(184,150,74,.25);background:linear-gradient(135deg,rgba(184,150,74,.05),rgba(10,13,23,.3))}
+.fa{border-color:rgba(184,150,74,.25);background:linear-gradient(135deg,rgba(184,150,74,.05),rgba(10,13,23,.3))}
 .frow{display:flex;align-items:center;justify-content:space-between;margin-bottom:.4rem}
-.ftitle{font-size:.62rem;font-weight:600;letter-spacing:.1em;text-transform:uppercase}
-.fmeta{font-size:.68rem;color:var(--t2);margin-bottom:.4rem}
-.fbar{height:2px;background:rgba(255,255,255,.06);border-radius:1px;overflow:hidden}
-.fbar-fill{height:100%;border-radius:1px}
-.fpct{font-size:.62rem;color:var(--t3);margin-top:.3rem}
-.tag{font-size:.55rem;font-weight:600;letter-spacing:.07em;text-transform:uppercase;padding:.15rem .5rem;border-radius:3px}
-.tag-active{background:rgba(184,150,74,.12);color:var(--gold)}
-.tag-done{background:rgba(45,184,122,.1);color:var(--green)}
-.tag-locked{background:rgba(255,255,255,.04);color:var(--t3)}
+.ft{font-size:.62rem;font-weight:600;letter-spacing:.1em;text-transform:uppercase}
+.fm{font-size:.68rem;color:var(--t2);margin-bottom:.4rem}
+.fb{height:2px;background:rgba(255,255,255,.06);border-radius:1px;overflow:hidden}
+.ff{height:100%;border-radius:1px}
+.fp{font-size:.62rem;color:var(--t3);margin-top:.3rem}
+.tg{font-size:.55rem;font-weight:600;letter-spacing:.07em;text-transform:uppercase;padding:.15rem .5rem;border-radius:3px}
+.tga{background:rgba(184,150,74,.12);color:var(--gold)}
+.tgd{background:rgba(45,184,122,.1);color:var(--green)}
+.tgl{background:rgba(255,255,255,.04);color:var(--t3)}
 .tbl{width:100%;border-collapse:collapse;font-size:.7rem}
 .tbl thead tr{border-bottom:1px solid var(--br)}
 .tbl th{padding:.55rem .8rem;color:var(--t3);font-weight:600;font-size:.58rem;letter-spacing:.1em;text-transform:uppercase;text-align:left;white-space:nowrap}
 .tbl td{padding:.5rem .8rem;border-bottom:1px solid var(--br3);color:var(--t2);white-space:nowrap}
 .tbl tbody tr:hover td{background:rgba(255,255,255,.015)}
 .r{text-align:right}.pos{color:var(--green)}.neg{color:var(--red)}
-.tr-sub td{background:var(--s2);color:var(--text);font-weight:500;border-top:1px solid var(--br)}
-.tr-tot td{background:rgba(184,150,74,.05);color:var(--gold);font-weight:500;border-top:1px solid var(--br)}
-.tr-liq td{background:rgba(45,184,122,.04);color:var(--green);font-weight:500}
-.tr-hd td{background:var(--s3);color:var(--t2);font-weight:600;font-size:.62rem;text-transform:uppercase}
-.tr-avg td{color:var(--t2);font-size:.67rem;border-top:1px solid var(--br);font-style:italic}
-.status-ok{display:inline-block;padding:.12rem .5rem;border-radius:3px;font-size:.58rem;font-weight:600;text-transform:uppercase;background:rgba(45,184,122,.08);color:var(--green)}
-.status-pr{display:inline-block;padding:.12rem .5rem;border-radius:3px;font-size:.58rem;font-weight:600;text-transform:uppercase;background:rgba(184,150,74,.08);color:var(--gold)}
-.status-rec{display:inline-block;padding:.12rem .5rem;border-radius:3px;font-size:.58rem;font-weight:600;text-transform:uppercase;background:rgba(42,184,164,.08);color:var(--teal2)}
-.tag-call{display:inline-block;padding:.1rem .4rem;border-radius:3px;font-size:.58rem;font-weight:600;background:rgba(74,144,212,.12);color:var(--b3)}
-.tag-put{display:inline-block;padding:.1rem .4rem;border-radius:3px;font-size:.58rem;font-weight:600;background:rgba(184,150,74,.1);color:var(--gold)}
-.cat-tag{font-size:.58rem;color:var(--t3);margin-left:.3rem}
-.toast{position:fixed;bottom:1.5rem;right:1.5rem;background:var(--s2);border:1px solid var(--br);border-radius:8px;padding:.6rem 1rem;font-size:.7rem;color:var(--t2);display:none;z-index:100}
+.ts td{background:var(--s2);color:var(--text);font-weight:500;border-top:1px solid var(--br)}
+.tt td{background:rgba(184,150,74,.05);color:var(--gold);font-weight:500;border-top:1px solid var(--br)}
+.tl td{background:rgba(45,184,122,.04);color:var(--green);font-weight:500}
+.th td{background:var(--s3);color:var(--t2);font-weight:600;font-size:.62rem;text-transform:uppercase}
+.ta td{color:var(--t2);font-size:.67rem;border-top:1px solid var(--br);font-style:italic}
+.ok{display:inline-block;padding:.12rem .5rem;border-radius:3px;font-size:.58rem;font-weight:600;text-transform:uppercase;background:rgba(45,184,122,.08);color:var(--green)}
+.pr{display:inline-block;padding:.12rem .5rem;border-radius:3px;font-size:.58rem;font-weight:600;text-transform:uppercase;background:rgba(184,150,74,.08);color:var(--gold)}
+.rc{display:inline-block;padding:.12rem .5rem;border-radius:3px;font-size:.58rem;font-weight:600;text-transform:uppercase;background:rgba(42,184,164,.08);color:var(--teal2)}
+.cl{display:inline-block;padding:.1rem .4rem;border-radius:3px;font-size:.58rem;font-weight:600;background:rgba(74,144,212,.12);color:var(--b3)}
+.pt{display:inline-block;padding:.1rem .4rem;border-radius:3px;font-size:.58rem;font-weight:600;background:rgba(184,150,74,.1);color:var(--gold)}
+.ct{font-size:.58rem;color:var(--t3);margin-left:.3rem}
 </style>
 </head>
 <body>
 <div class="hdr">
-  <div><div class="logo">Portal <em>ILP</em></div><div class="tagline">Inteligência de Longo Prazo</div></div>
+  <div><div class="logo">Portal <em>ILP</em></div><div class="tagline">Inteligencia de Longo Prazo</div></div>
   <div style="display:flex;align-items:center;gap:1.5rem;flex-wrap:wrap">
-    <div class="sync" onclick="sincronizar()" title="Clique para sincronizar com a planilha"><div class="sync-dot" id="syncDot"></div><span id="syncLabel">Jun/2026</span></div>
+    <div class="sync" onclick="sync()" title="Sincronizar"><div class="dot" id="dot"></div><span id="lbl">Jun/2026</span></div>
     <div class="nav">
       <button class="nb active" onclick="tab('dashboard',this)">Dashboard</button>
-      <button class="nb" onclick="tab('alugueis',this)">Aluguéis</button>
+      <button class="nb" onclick="tab('alugueis',this)">Alugueis</button>
       <button class="nb" onclick="tab('dividendos',this)">Dividendos</button>
-      <button class="nb" onclick="tab('sinteticos',this)">Sintéticos</button>
-      <button class="nb" onclick="tab('relatorios',this)">Relatórios</button>
+      <button class="nb" onclick="tab('sinteticos',this)">Sinteticos</button>
+      <button class="nb" onclick="tab('relatorios',this)">Relatorios</button>
     </div>
   </div>
 </div>
-<div class="wrap" id="appContent">
+<div class="wrap">
   <div id="tab-dashboard" class="tab active">
-    <div class="sec">Patrimônio</div>
+    <div class="sec">Patrimonio</div>
     <div class="g3">
-      <div class="card"><div class="label">Total de Ativos</div><div class="value" id="vAtivos">R$ 482.970</div></div>
-      <div class="card"><div class="label">Total de Passivos</div><div class="value red" id="vPassivos">R$ 0</div></div>
-      <div class="card ca"><div class="label">Patrimônio Líquido</div><div class="value gold lg" id="vPatLiq">R$ 482.970</div><div class="subval">Ativos − Passivos</div></div>
+      <div class="card"><div class="lbl">Total de Ativos</div><div class="val" id="vA">R$ 482.970</div></div>
+      <div class="card"><div class="lbl">Total de Passivos</div><div class="val red" id="vP">R$ 0</div></div>
+      <div class="card ca"><div class="lbl">Patrimonio Liquido</div><div class="val gold lg" id="vL">R$ 482.970</div><div class="sub">Ativos menos Passivos</div></div>
     </div>
     <div class="g2">
-      <div class="card"><div class="label">Por classe de ativo</div><div style="display:flex;gap:1rem;align-items:center"><div style="width:130px;flex-shrink:0;height:155px;position:relative"><canvas id="cPie"></canvas></div><div style="flex:1"><div class="cw" style="height:155px"><canvas id="cBarClasse"></canvas></div></div></div><div id="legClasse" style="display:flex;flex-wrap:wrap;gap:12px;margin-top:10px;font-size:.64rem;color:var(--t2)"></div></div>
-      <div class="card"><div class="label">Detalhamento por ativo</div><div style="display:flex;gap:1rem"><div style="width:125px;flex-shrink:0;height:185px;position:relative"><canvas id="cPieAt"></canvas></div><div style="flex:1;max-height:205px;overflow-y:auto"><table class="atv-tbl"><thead><tr><th style="padding:.3rem .4rem;color:var(--t3);font-size:.58rem;font-weight:600;text-transform:uppercase;text-align:left;border-bottom:1px solid var(--br)">Ativo</th><th style="padding:.3rem .4rem;color:var(--t3);font-size:.58rem;font-weight:600;text-transform:uppercase;text-align:right;border-bottom:1px solid var(--br)">Valor</th><th style="padding:.3rem .4rem;color:var(--t3);font-size:.58rem;font-weight:600;text-transform:uppercase;text-align:right;border-bottom:1px solid var(--br)">%</th></tr></thead><tbody id="tbAt"></tbody></table></div></div></div>
+      <div class="card"><div class="lbl">Por classe de ativo</div>
+        <div style="display:flex;gap:1rem;align-items:center">
+          <div style="width:130px;flex-shrink:0;height:155px;position:relative"><canvas id="cP"></canvas></div>
+          <div style="flex:1"><div style="height:155px"><canvas id="cB"></canvas></div></div>
+        </div>
+        <div id="lC" style="display:flex;flex-wrap:wrap;gap:12px;margin-top:10px;font-size:.64rem;color:var(--t2)"></div>
+      </div>
+      <div class="card"><div class="lbl">Detalhamento por ativo</div>
+        <div style="display:flex;gap:1rem">
+          <div style="width:125px;flex-shrink:0;height:185px;position:relative"><canvas id="cPA"></canvas></div>
+          <div style="flex:1;max-height:205px;overflow-y:auto">
+            <table class="atbl"><thead><tr>
+              <th style="padding:.3rem .4rem;color:var(--t3);font-size:.58rem;font-weight:600;text-transform:uppercase;text-align:left;border-bottom:1px solid var(--br)">Ativo</th>
+              <th style="padding:.3rem .4rem;color:var(--t3);font-size:.58rem;font-weight:600;text-transform:uppercase;text-align:right;border-bottom:1px solid var(--br)">Valor</th>
+              <th style="padding:.3rem .4rem;color:var(--t3);font-size:.58rem;font-weight:600;text-transform:uppercase;text-align:right;border-bottom:1px solid var(--br)">%</th>
+            </tr></thead><tbody id="tbA"></tbody></table>
+          </div>
+        </div>
+      </div>
     </div>
     <div class="sec">Renda Passiva</div>
-    <div class="g4" id="cardsRenda"></div>
+    <div class="g4" id="cR4"></div>
     <div class="g2">
-      <div class="card"><div class="label">Composição da renda passiva 2026</div><div class="sbar" style="margin-top:.8rem" id="splitBar"></div><div class="slabs" id="splitLabels"></div><div class="cw" style="height:195px;margin-top:1rem"><canvas id="cRenda"></canvas></div><div id="rendaLegend" style="display:flex;gap:1.2rem;margin-top:.75rem;font-size:.62rem;color:var(--t2);flex-wrap:wrap"></div></div>
-      <div class="card ca"><div class="label">Índice de Liberdade Financeira</div><div class="ilf-wrap" id="ilfWrap"></div></div>
+      <div class="card"><div class="lbl">Composicao da renda passiva 2026</div>
+        <div class="sbar" style="margin-top:.8rem" id="sB"></div>
+        <div class="slbs" id="sL"></div>
+        <div style="height:195px;margin-top:1rem"><canvas id="cR"></canvas></div>
+        <div id="rL" style="display:flex;gap:1.2rem;margin-top:.75rem;font-size:.62rem;color:var(--t2);flex-wrap:wrap"></div>
+      </div>
+      <div class="card ca"><div class="lbl">Indice de Liberdade Financeira</div><div class="ilf" id="iW"></div></div>
     </div>
-    <div class="sec">Renda Passiva Mensal — 2026</div>
-    <div class="card" style="margin-bottom:1rem"><table class="tbl"><thead><tr><th>Mês</th><th class="r">Aluguéis</th><th class="r">Dividendos</th><th class="r">Div. Sintéticos</th><th class="r">Total Mês</th></tr></thead><tbody id="tbRenda"></tbody></table></div>
-    <div class="sec">Aportes Realizados — 2026</div>
-    <div class="g3" id="cardsAportes" style="margin-bottom:1rem"></div>
-    <div class="card"><table class="tbl"><thead><tr><th>Mês</th><th class="r">Aporte Mensal</th><th class="r">Acumulado</th></tr></thead><tbody id="tbAportes"></tbody></table></div>
+    <div class="sec">Renda Passiva Mensal 2026</div>
+    <div class="card" style="margin-bottom:1rem"><table class="tbl">
+      <thead><tr><th>Mes</th><th class="r">Alugueis</th><th class="r">Dividendos</th><th class="r">Div. Sinteticos</th><th class="r">Total</th></tr></thead>
+      <tbody id="tbR"></tbody>
+    </table></div>
+    <div class="sec">Aportes 2026</div>
+    <div class="g3" id="cA3" style="margin-bottom:1rem"></div>
+    <div class="card"><table class="tbl">
+      <thead><tr><th>Mes</th><th class="r">Aporte</th><th class="r">Acumulado</th></tr></thead>
+      <tbody id="tbAp"></tbody>
+    </table></div>
   </div>
-  <div id="tab-alugueis" class="tab"><div class="sec">Aluguéis</div><div class="g4" id="cardsAlug" style="margin-bottom:1rem"></div><div class="card"><div style="overflow-x:auto"><table class="tbl"><thead><tr><th>Data</th><th>Classe</th><th>Tipo</th><th>Localização</th><th class="r">Valor Mensal</th><th class="r">Dt. Recebimento</th><th class="r">Valor Pago</th><th>Status</th></tr></thead><tbody id="tbAlug"></tbody></table></div></div></div>
-  <div id="tab-dividendos" class="tab"><div class="sec">Calendário de Dividendos</div><div class="g4" id="cardsDiv" style="margin-bottom:1rem"></div><div class="card"><div style="overflow-x:auto"><table class="tbl"><thead><tr><th>Ativo</th><th>Tipo</th><th>Segmento</th><th>Pagamento</th><th class="r">Qtd</th><th class="r">IR</th><th class="r">IOF</th><th class="r">Valor Líquido</th><th>Status</th></tr></thead><tbody id="tbDiv"></tbody></table></div></div></div>
-  <div id="tab-sinteticos" class="tab"><div class="sec">Dividendos Sintéticos</div><div class="g4" id="cardsSin" style="margin-bottom:1rem"></div><div class="g3" id="cardsSin2" style="margin-bottom:1rem"></div><div class="card"><div style="overflow-x:auto"><table class="tbl"><thead><tr><th>#</th><th>Ação</th><th>Data</th><th>Opção</th><th class="r">Strike</th><th class="r">% Strike</th><th>Tipo</th><th class="r">Qtd</th><th class="r">Prêmio</th><th>Vencimento</th><th>Exercício</th><th class="r">% Geral</th><th class="r">Ganho</th><th class="r">% Líq.</th></tr></thead><tbody id="tbSin"></tbody></table></div></div></div>
-  <div id="tab-relatorios" class="tab"><div class="sec">Evolução Trimestral</div><div class="card"><div style="overflow-x:auto"><table class="tbl" id="tblRel"><thead></thead><tbody></tbody></table></div></div></div>
+  <div id="tab-alugueis" class="tab">
+    <div class="sec">Alugueis</div>
+    <div class="g4" id="cAlg" style="margin-bottom:1rem"></div>
+    <div class="card"><div style="overflow-x:auto"><table class="tbl">
+      <thead><tr><th>Data</th><th>Classe</th><th>Tipo</th><th>Local</th><th class="r">Valor</th><th class="r">Dt.Rec</th><th class="r">Pago</th><th>Status</th></tr></thead>
+      <tbody id="tbAl"></tbody>
+    </table></div></div>
+  </div>
+  <div id="tab-dividendos" class="tab">
+    <div class="sec">Dividendos</div>
+    <div class="g4" id="cDv4" style="margin-bottom:1rem"></div>
+    <div class="card"><div style="overflow-x:auto"><table class="tbl">
+      <thead><tr><th>Ativo</th><th>Tipo</th><th>Segmento</th><th>Pagto</th><th class="r">Qtd</th><th class="r">IR</th><th class="r">IOF</th><th class="r">Liq.</th><th>Status</th></tr></thead>
+      <tbody id="tbDv"></tbody>
+    </table></div></div>
+  </div>
+  <div id="tab-sinteticos" class="tab">
+    <div class="sec">Sinteticos</div>
+    <div class="g4" id="cSn4" style="margin-bottom:1rem"></div>
+    <div class="g3" id="cSn3" style="margin-bottom:1rem"></div>
+    <div class="card"><div style="overflow-x:auto"><table class="tbl">
+      <thead><tr><th>#</th><th>Acao</th><th>Data</th><th>Opcao</th><th class="r">Strike</th><th class="r">%</th><th>Tipo</th><th class="r">Qtd</th><th class="r">Premio</th><th>Venc.</th><th>Exercicio</th><th class="r">%Ger</th><th class="r">Ganho</th><th class="r">%Liq</th></tr></thead>
+      <tbody id="tbSn"></tbody>
+    </table></div></div>
+  </div>
+  <div id="tab-relatorios" class="tab">
+    <div class="sec">Evolucao Trimestral</div>
+    <div class="card"><div style="overflow-x:auto"><table class="tbl" id="tRel"><thead></thead><tbody></tbody></table></div></div>
+  </div>
 </div>
-<div class="toast" id="toast"></div>
-<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js"></script>
 <script>
-const D={p:{a:482970,ps:0,l:482970},cl:[{n:'Mercado Financeiro',v:284784},{n:'Outros',v:198186}],av:[{n:'Cx ProPay Selic CDI',v:81679,c:'MF'},{n:'Cx Carro Mariana',v:63028,c:'O'},{n:'Chevrolet Onix 2017',v:54682,c:'O'},{n:'Honda Fit 2012',v:44012,c:'O'},{n:'Tesouro Prefixado 2035',v:34662,c:'MF'},{n:'BBSE3',v:24574,c:'MF'},{n:'BBAS3',v:22300,c:'MF'},{n:'Cx Projeto Baby',v:19939,c:'O'},{n:'ITUB4',v:17202,c:'MF'},{n:'PETR4',v:14796,c:'MF'},{n:'Tesouro Selic 2031',v:11788,c:'MF'},{n:'Cx Carro Morona',v:10614,c:'O'},{n:'Tesouro IPCA+ 2035',v:10379,c:'MF'},{n:'PRIO3',v:10263,c:'MF'},{n:'CMIG4',v:8305,c:'MF'},{n:'SAPR4',v:7659,c:'MF'},{n:'CGRA4',v:6102,c:'MF'},{n:'Cx Prev Viagem',v:5911,c:'O'},{n:'LEVE3',v:3499,c:'MF'},{n:'GOGL34',v:1734,c:'MF'},{n:'MLSA13',v:1677,c:'MF'},{n:'MATO3',v:23,c:'MF'}],rn:{a:[17900,17900,17900,17900,17900,17900,0,0,0,0,0,0],d:[0,123.97,2255.12,0,287.93,0,0,0,0,0,0,0],s:[56.10,917.15,725.90,1008.40,608.60,0,0,0,0,0,0,0]},ap:[40000,7400,9000,13600,8608,0,0,0,0,0,0,0]};
-const MESES=['Janeiro','Fevereiro','Março','Abril','Maio','Junho','Julho','Agosto','Setembro','Outubro','Novembro','Dezembro'];
-const MS=['Jan','Fev','Mar','Abr','Mai','Jun','Jul','Ago','Set','Out','Nov','Dez'];
-const f=v=>v.toLocaleString('pt-BR',{style:'currency',currency:'BRL'});
-let cP,cB,cPA,cR;
-function tab(id,btn){document.querySelectorAll('.tab').forEach(e=>e.classList.remove('active'));document.querySelectorAll('.nb').forEach(e=>e.classList.remove('active'));document.getElementById('tab-'+id).classList.add('active');btn.classList.add('active')}
-function toast(m){const t=document.getElementById('toast');t.textContent=m;t.style.display='block';setTimeout(()=>t.style.display='none',3000)}
-function iniciar(){
-  const clsC=['#2563b8','#7ab8e8'],tC=D.cl.reduce((a,b)=>a+b.v,0);
-  if(cP)cP.destroy();cP=new Chart(document.getElementById('cPie'),{type:'doughnut',data:{labels:D.cl.map(c=>c.n),datasets:[{data:D.cl.map(c=>c.v),backgroundColor:clsC,borderWidth:2,borderColor:'#0b0e17',hoverOffset:4}]},options:{responsive:true,maintainAspectRatio:false,cutout:'72%',plugins:{legend:{display:false},tooltip:{callbacks:{label:i=>' '+f(i.raw)}}}}});
-  if(cB)cB.destroy();cB=new Chart(document.getElementById('cBarClasse'),{type:'bar',data:{labels:D.cl.map(c=>c.n),datasets:[{data:D.cl.map(c=>c.v),backgroundColor:clsC,borderRadius:4,borderWidth:0}]},options:{responsive:true,maintainAspectRatio:false,indexAxis:'y',plugins:{legend:{display:false},tooltip:{callbacks:{label:i=>' '+f(i.raw)}}},scales:{x:{ticks:{color:'#424858',font:{size:9},callback:v=>v>=1e3?(v/1e3).toFixed(0)+'k':v},grid:{color:'rgba(255,255,255,.03)'},border:{display:false}},y:{ticks:{color:'#7a8196',font:{size:9}},grid:{display:false},border:{display:false}}}}});
-  const lc=document.getElementById('legClasse');lc.innerHTML='';D.cl.forEach((c,i)=>lc.innerHTML+='<span style="display:flex;align-items:center;gap:5px"><span style="width:8px;height:1px;background:'+clsC[i]+';display:inline-block"></span>'+c.n+' <strong style="color:var(--text);font-weight:500">'+((c.v/tC)*100).toFixed(1)+'%</strong></span>');
-  const av=[...D.av].sort((a,b)=>b.v-a.v),tA=av.reduce((a,b)=>a+b.v,0);
-  const aC=av.map((_,i)=>['#1a3a6e','#1e4280','#224a92','#275eb8','#2b66c8','#3070d4','#3a7ed8','#447edc','#4e8ae6','#5896ec','#62a0f0','#6cacf4','#76b6f8','#7abce8','#6eb0e0','#5698d0','#4a8cc8','#3e80c0','#3274b8','#2668b0','#1a5ca8','#1050a0'][i%22]);
-  if(cPA)cPA.destroy();cPA=new Chart(document.getElementById('cPieAt'),{type:'doughnut',data:{labels:av.map(a=>a.n),datasets:[{data:av.map(a=>a.v),backgroundColor:aC,borderWidth:1,borderColor:'#0b0e17',hoverOffset:3}]},options:{responsive:true,maintainAspectRatio:false,cutout:'60%',plugins:{legend:{display:false},tooltip:{callbacks:{label:i=>' '+f(i.raw)+' ('+((i.raw/tA)*100).toFixed(1)+'%)'}}}}});
-  const tb=document.getElementById('tbAt');tb.innerHTML='';av.forEach((a,i)=>tb.innerHTML+='<tr><td style="display:flex;align-items:center;gap:.4rem;padding:.3rem .4rem"><span style="width:5px;height:5px;border-radius:50%;background:'+aC[i]+';flex-shrink:0;display:inline-block"></span><span style="color:var(--t2)">'+a.n+'</span><span class="cat-tag">('+( a.c==='MF'?'Merc. Fin.':'Outros')+')</span></td><td style="text-align:right;padding:.3rem .4rem;color:var(--text)">'+f(a.v)+'</td><td style="text-align:right;padding:.3rem .4rem;color:var(--t3)">'+((a.v/tA)*100).toFixed(1)+'%</td></tr>');
-  const{a,d,s}=D.rn,aT=a.reduce((x,y)=>x+y,0),dT=d.reduce((x,y)=>x+y,0),sT=s.reduce((x,y)=>x+y,0),tR=aT+dT+sT,mR=a.filter(v=>v>0).length||6,med=tR/mR;
-  const aP=((aT/tR)*100).toFixed(1),dP=((dT/tR)*100).toFixed(1),sP=((sT/tR)*100).toFixed(1);
-  document.getElementById('cardsRenda').innerHTML='<div class="card ca"><div class="label">Aluguéis recebidos</div><div class="value" style="color:var(--teal2)">'+f(aT)+'</div><div class="subval">'+mR+' meses</div></div><div class="card ca"><div class="label">Dividendos realizados</div><div class="value" style="color:var(--b3)">'+f(dT)+'</div></div><div class="card ca"><div class="label">Sintéticos realizados</div><div class="value" style="color:var(--b4)">'+f(sT)+'</div></div><div class="card"><div class="label">Média mensal realizada</div><div class="value green">'+f(med)+'</div></div>';
-  document.getElementById('splitBar').innerHTML='<div style="width:'+aP+'%;background:var(--teal)"></div><div style="width:'+dP+'%;background:var(--b2)"></div><div style="width:'+sP+'%;background:var(--b4)"></div>';
-  document.getElementById('splitLabels').innerHTML='<span style="color:var(--teal2)">▪ Aluguéis '+aP+'%</span><span style="color:var(--b3)">▪ Dividendos '+dP+'%</span><span style="color:var(--b4)">▪ Sintéticos '+sP+'%</span>';
-  document.getElementById('rendaLegend').innerHTML='<span style="display:flex;align-items:center;gap:.4rem"><span style="width:10px;height:2px;background:var(--teal);display:inline-block"></span>Aluguéis</span><span style="display:flex;align-items:center;gap:.4rem"><span style="width:10px;height:2px;background:var(--b2);display:inline-block"></span>Dividendos</span><span style="display:flex;align-items:center;gap:.4rem"><span style="width:10px;height:2px;background:var(--b4);display:inline-block"></span>Sintéticos</span>';
-  if(cR)cR.destroy();cR=new Chart(document.getElementById('cRenda'),{type:'bar',data:{labels:MS,datasets:[{label:'A',data:a,backgroundColor:'#1a6a5a',borderRadius:2,stack:'r'},{label:'D',data:d,backgroundColor:'#2563b8',borderRadius:2,stack:'r'},{label:'S',data:s,backgroundColor:'#7ab8e8',borderRadius:2,stack:'r'}]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false},tooltip:{callbacks:{label:i=>' '+f(i.raw)}}},scales:{x:{ticks:{color:'#424858',font:{size:9}},grid:{display:false},stacked:true,border:{display:false}},y:{ticks:{color:'#424858',font:{size:9},callback:v=>v>=1e3?(v/1e3).toFixed(0)+'k':v},grid:{color:'rgba(255,255,255,.03)'},stacked:true,border:{display:false}}}}});
-  const fases=[{m:2500,l:'Fase 01'},{m:5000,l:'Fase 02'},{m:10000,l:'Fase 03'},{m:20000,l:'Fase 04 — Liberdade'}];
-  const iw=document.getElementById('ilfWrap');iw.innerHTML='';
-  fases.forEach((fase,i)=>{const p=Math.min((med/fase.m)*100,100),done=med>=fase.m,next=!done&&(i===0||(med>=fases[i-1].m)),lock=!done&&!next;iw.innerHTML+='<div class="fase '+(done||next?'fase-active':'')+'"><div class="frow"><span class="ftitle" style="color:'+(done?'var(--green)':next?'var(--gold)':'var(--t2)')+'">'+fase.l+'</span><span class="tag '+(done?'tag-done':next?'tag-active':'tag-locked')+'">'+(done?'✓ Concluída':next?'Em andamento':'Bloqueada')+'</span></div><div class="fmeta" style="color:'+(lock?'var(--t3)':'var(--t2)')+'">Meta <strong style="color:'+(lock?'var(--t3)':'var(--text)')+'">'+f(fase.m)+'/mês</strong>'+(next?' · Atual <strong style="color:var(--green)">'+f(med)+'</strong>':'')+'</div><div class="fbar"><div class="fbar-fill" style="width:'+p+'%;background:'+(done?'var(--green)':next?'linear-gradient(90deg,var(--gold),var(--gold2))':'var(--s4)')+'"></div></div><div class="fpct" style="color:'+(done?'var(--green)':next?'var(--gold)':'var(--t3)')+'">'+(done?'Renda supera a meta':next?p.toFixed(1)+'% concluído':'Disponível após fase anterior')+'</div></div>';});
-  const tbR=document.getElementById('tbRenda');tbR.innerHTML='';let tA2=0,tD=0,tS=0;
-  MESES.forEach((mes,i)=>{const av2=a[i],dv=d[i],sv=s[i],tot=av2+dv+sv;tA2+=av2;tD+=dv;tS+=sv;tbR.innerHTML+='<tr><td style="color:'+(tot===0?'var(--t3)':'var(--text)')+'">'+mes+'</td><td class="r '+(av2>0?'pos':'')+'">'+(av2>0?f(av2):'—')+'</td><td class="r '+(dv>0?'pos':'')+'">'+(dv>0?f(dv):'—')+'</td><td class="r '+(sv>0?'pos':'')+'">'+(sv>0?f(sv):'—')+'</td><td class="r '+(tot>0?'pos':'')+'">'+(tot>0?f(tot):'—')+'</td></tr>';});
-  tbR.innerHTML+='<tr class="tr-sub"><td>Total 2026</td><td class="r pos">'+f(tA2)+'</td><td class="r pos">'+f(tD)+'</td><td class="r pos">'+f(tS)+'</td><td class="r pos">'+f(tA2+tD+tS)+'</td></tr><tr class="tr-avg"><td>Média mensal</td><td class="r">'+f(tA2/mR)+'</td><td class="r">'+f(tD/mR)+'</td><td class="r">'+f(tS/mR)+'</td><td class="r green" style="font-weight:500">'+f((tA2+tD+tS)/mR)+'</td></tr>';
-  const ap=D.ap,apT=ap.reduce((x,y)=>x+y,0),mAp=ap.filter(v=>v>0).length||5;
-  document.getElementById('cardsAportes').innerHTML='<div class="card ca"><div class="label">Total Aportado 2026</div><div class="value gold">'+f(apT)+'</div></div><div class="card"><div class="label">Média de Aporte Mensal</div><div class="value">'+f(apT/mAp)+'</div><div class="subval">'+mAp+' meses</div></div><div class="card"><div class="label">Meses com Aporte</div><div class="value">'+mAp+' <span style="font-size:.9rem;color:var(--t2)">de 12</span></div></div>';
-  const tbAp=document.getElementById('tbAportes');tbAp.innerHTML='';let ac=0;
-  MESES.forEach((mes,i)=>{const v=ap[i]||0;if(v>0)ac+=v;tbAp.innerHTML+='<tr><td style="color:'+(v===0?'var(--t3)':'var(--text)')+'">'+mes+'</td><td class="r '+(v>0?'gold':'')+'">'+(v>0?f(v):'—')+'</td><td class="r" style="color:'+(v===0?'var(--t3)':'var(--text)')+'">'+f(ac)+'</td></tr>';});
-  tbAp.innerHTML+='<tr class="tr-tot"><td>Total 2026</td><td class="r">'+f(apT)+'</td><td class="r">'+f(apT)+'</td></tr>';
-  // Aluguéis
-  const alR=[['jan/26','Comercial','Galpão','Aparecida de Goiânia · GO',4000,'10/01/2026',4000,'Recebido'],['jan/26','Residencial','Galpão','Goiânia · GO',3500,'10/01/2026',3500,'Recebido'],['jan/26','Residencial','Casa em Condomínio','Goiânia · GO',8000,'05/01/2026',8000,'Recebido'],['jan/26','Residencial','Apartamento','Goiânia · GO',2400,'05/01/2026',2400,'Recebido'],['fev/26','Comercial','Galpão','Aparecida de Goiânia · GO',4000,'10/02/2026',4000,'Recebido'],['fev/26','Residencial','Galpão','Goiânia · GO',3500,'10/02/2026',3500,'Recebido'],['fev/26','Residencial','Casa em Condomínio','Goiânia · GO',8000,'05/02/2026',8000,'Recebido'],['fev/26','Residencial','Apartamento','Goiânia · GO',2400,'05/02/2026',2400,'Recebido'],['mar/26','Comercial','Galpão','Aparecida de Goiânia · GO',4000,'10/03/2026',4000,'Recebido'],['mar/26','Residencial','Galpão','Goiânia · GO',3500,'10/03/2026',3500,'Recebido'],['mar/26','Residencial','Casa em Condomínio','Goiânia · GO',8000,'05/03/2026',8000,'Recebido'],['mar/26','Residencial','Apartamento','Goiânia · GO',2400,'05/03/2026',2400,'Recebido'],['abr/26','Comercial','Galpão','Aparecida de Goiânia · GO',4000,'10/04/2026',4000,'Recebido'],['abr/26','Residencial','Galpão','Goiânia · GO',3500,'10/04/2026',3500,'Recebido'],['abr/26','Residencial','Casa em Condomínio','Goiânia · GO',8000,'05/04/2026',8000,'Recebido'],['abr/26','Residencial','Apartamento','Goiânia · GO',2400,'05/04/2026',2400,'Recebido'],['mai/26','Comercial','Galpão','Aparecida de Goiânia · GO',4000,'10/05/2026',4000,'Recebido'],['mai/26','Residencial','Galpão','Goiânia · GO',3500,'10/05/2026',3500,'Recebido'],['mai/26','Residencial','Casa em Condomínio','Goiânia · GO',8000,'05/05/2026',8000,'Recebido'],['mai/26','Residencial','Apartamento','Goiânia · GO',2400,'05/05/2026',2400,'Recebido'],['jun/26','Comercial','Galpão','Aparecida de Goiânia · GO',4000,'10/06/2026',4000,'Recebido'],['jun/26','Residencial','Galpão','Goiânia · GO',3500,'10/06/2026',3500,'Recebido'],['jun/26','Residencial','Casa em Condomínio','Goiânia · GO',8000,'05/06/2026',8000,'Recebido'],['jun/26','Residencial','Apartamento','Goiânia · GO',2400,'05/06/2026',2400,'Recebido'],['jul/26','Comercial','Galpão','Aparecida de Goiânia · GO',4000,'10/07/2026',0,'A receber'],['jul/26','Residencial','Galpão','Goiânia · GO',3500,'10/07/2026',0,'A receber'],['jul/26','Residencial','Casa em Condomínio','Goiânia · GO',8000,'05/07/2026',0,'A receber'],['jul/26','Residencial','Apartamento','Goiânia · GO',2400,'05/07/2026',0,'A receber']];
-  const tbAl=document.getElementById('tbAlug');tbAl.innerHTML='';let alT=0;
-  alR.forEach(r=>{const ok=r[7]==='Recebido';if(ok)alT+=r[6];tbAl.innerHTML+='<tr><td>'+r[0]+'</td><td>'+r[1]+'</td><td>'+r[2]+'</td><td style="color:var(--t2)">'+r[3]+'</td><td class="r pos">'+f(r[4])+'</td><td class="r">'+r[5]+'</td><td class="r '+(ok?'pos':'')+'"> '+(ok?f(r[6]):'—')+'</td><td><span class="'+(ok?'status-rec':'status-pr')+'">'+r[7]+'</span></td></tr>';});
-  document.getElementById('cardsAlug').innerHTML='<div class="card ca"><div class="label">Total Recebido 2026</div><div class="value" style="color:var(--teal2)">'+f(alT)+'</div></div><div class="card"><div class="label">Mensal Fixo</div><div class="value">R$ 17.900,00</div><div class="subval">4 imóveis ativos</div></div><div class="card"><div class="label">Meses Recebidos</div><div class="value">6 <span style="font-size:.9rem;color:var(--t2)">de 12</span></div></div><div class="card"><div class="label">Próximo Recebimento</div><div class="value" style="color:var(--b3)">Jul/2026</div></div>';
-  // Dividendos
-  const dR=[['PETR4','Juros s/ cap. próprio','Petróleo & Gás','20/02/2026',304,'—','—','R$ 121,36','Realizado'],['PETR4','Dividendos','Petróleo & Gás','20/02/2026',304,'—','—','R$ 0,60','Realizado'],['BBSE3','Dividendos','Financeiro','02/03/2026',706,'R$ 9,02','—','R$ 1.800,27','Realizado'],['ITUB4','Rendimentos','Financeiro','20/03/2026',400,'R$ 1,33','—','R$ 5,00','Realizado'],['VALE3','Dividendos','Mineração','04/03/2026',78,'R$ 18,36','—','R$ 104,06','Realizado'],['BBAS3','Dividendos','Financeiro','05/03/2026',500,'R$ 18,92','—','R$ 110,54','Realizado'],['BBAS3','Juros s/ cap. próprio','Financeiro','11/03/2026',500,'R$ 6,12','—','R$ 28,94','Realizado'],['GOGL34','Dividendos','Comunicação','01/04/2026',14,'—','—','R$ 0,86','Realizado'],['PETR4','Dividendos','Petróleo & Gás','20/03/2026',304,'R$ 7,98','—','R$ 40,11','Realizado'],['LEVE3','Dividendos','Outros','27/03/2026',100,'R$ 14,27','—','R$ 178,19','Realizado'],['LEVE3','Dividendos','Outros','30/04/2026',100,'R$ 80,51','—','R$ 80,51','Realizado'],['BBAS3','Juros s/ cap. próprio','Financeiro','01/06/2026',500,'R$ 0,38','—','R$ 2,01','Projetado'],['CMIG4','Dividendos','Serviços Básicos','30/10/2026',500,'R$ 59,08','—','R$ 59,08','Projetado'],['CMIG4','Juros s/ cap. próprio','Serviços Básicos','30/11/2026',500,'R$ 8,51','—','R$ 48,88','Projetado'],['CMIG4','Juros s/ cap. próprio','Serviços Básicos','30/11/2026',500,'R$ 3,82','—','R$ 48,88','Projetado']];
-  const tbDiv=document.getElementById('tbDiv');tbDiv.innerHTML='';let rl=0,pj=0;
-  dR.forEach(r=>{const ok=r[8]==='Realizado',fut=r[8]==='Projetado';if(ok)rl+=parseFloat(r[7].replace(/[R$s.]/g,'').replace(',','.'))||0;if(fut)pj+=parseFloat(r[7].replace(/[R$s.]/g,'').replace(',','.'))||0;tbDiv.innerHTML+='<tr><td style="color:var(--gold);font-weight:500">'+r[0]+'</td><td>'+r[1]+'</td><td>'+r[2]+'</td><td>'+r[3]+'</td><td class="r">'+r[4]+'</td><td class="r">'+r[5]+'</td><td class="r">'+r[6]+'</td><td class="r '+(ok?'pos':'')+'" style="font-weight:500">'+r[7]+'</td><td><span class="'+(ok?'status-ok':'status-pr')+'">'+r[8]+'</span></td></tr>';});
-  document.getElementById('cardsDiv').innerHTML='<div class="card"><div class="label">Realizados</div><div class="value green">'+f(rl)+'</div></div><div class="card"><div class="label">Projetados</div><div class="value gold">'+f(pj)+'</div></div><div class="card ca"><div class="label">Total Geral</div><div class="value">'+f(rl+pj)+'</div></div><div class="card"><div class="label">Próximo Pagamento</div><div class="value" style="color:var(--b3)">22/06/2026</div></div>';
-  // Sintéticos
-  const sR=[[1,'BBAS3','27/01/2026','BBASB271','R$27,11','-8,88%','CALL',100,'R$30,00','28/01/2026','Expirada','1,13%','R$30,60','1,18%'],[2,'BBAS3','27/01/2026','BBASN233','R$23,24','1,66%','PUT',100,'R$30,00','28/01/2026','Expirada','2,00%','R$25,50','1,98%'],[3,'BBAS3','02/02/2026','BBASN271','R$33,65','1,90%','PUT',400,'R$240,00','20/02/2026','Expirada','1,81%','R$198,79','1,98%'],[4,'ITUB4','02/02/2026','ITUB4','R$34,57','2,03%','PUT',500,'R$90,00','20/02/2026','Expirada','1,59%','R$86,20','1,58%'],[5,'VALE3','02/02/2026','VALEX3','R$75,40','3,99%','PUT',500,'R$360,00','20/02/2026','Expirada','1,42%','R$204,18','1,58%']];
-  const tbSin=document.getElementById('tbSin');tbSin.innerHTML='';
-  sR.forEach(r=>{const isC=r[6]==='CALL',p2=parseFloat(r[5].replace('%','').replace(',','.'));tbSin.innerHTML+='<tr><td style="color:var(--t3)">'+r[0]+'</td><td style="color:var(--gold);font-weight:500">'+r[1]+'</td><td>'+r[2]+'</td><td style="color:var(--t2)">'+r[3]+'</td><td class="r">'+r[4]+'</td><td class="r '+(p2>=0?'pos':'neg')+'">'+r[5]+'</td><td><span class="'+(isC?'tag-call':'tag-put')+'">'+r[6]+'</span></td><td class="r">'+r[7]+'</td><td class="r">'+r[8]+'</td><td>'+r[9]+'</td><td style="color:var(--t2)">'+r[10]+'</td><td class="r">'+r[11]+'</td><td class="r pos" style="font-weight:500">'+r[12]+'</td><td class="r gold">'+r[13]+'</td></tr>';});
-  document.getElementById('cardsSin').innerHTML='<div class="card ca"><div class="label">Total Recebido</div><div class="value gold">'+f(3899)+'</div></div><div class="card"><div class="label">Resultado Líquido</div><div class="value green">'+f(3314.15)+'</div></div><div class="card"><div class="label">% Líquida Mensal</div><div class="value gold">1,46%</div><div class="subval">Selic put + lucro call</div></div><div class="card"><div class="label">% Líquida Anual</div><div class="value gold">19,02%</div></div>';
-  document.getElementById('cardsSin2').innerHTML='<div class="card"><div class="label">Operações Abertas</div><div class="value" style="color:var(--b3)">5</div></div><div class="card"><div class="label">Operações Encerradas</div><div class="value">7</div></div><div class="card"><div class="label">Ganho Valorização</div><div class="value green">R$ 811,80</div></div>';
-  // Relatório
-  const tbl=document.getElementById('tblRel');tbl.querySelector('thead').innerHTML='<tr><th>Categoria / Item</th><th class="r">Q1'26</th><th class="r">Q2'26</th><th class="r">Q3'26</th><th class="r">Q4'26</th></tr>';
-  const rr=[['hd','Mercado Financeiro'],['Cx ProPay Selic CDI','—','R$ 81.679','—','—'],['Tesouro Prefixado 2035','—','R$ 34.663','—','—'],['Tesouro IPCA+ 2035','—','R$ 10.379','—','—'],['Tesouro Selic 2031','—','R$ 11.788','—','—'],['BBAS3','—','R$ 22.300','—','—'],['BBSE3','—','R$ 24.574','—','—'],['CGRA4','—','R$ 6.103','—','—'],['CMIG4','—','R$ 8.305','—','—'],['ITUB4','—','R$ 17.202','—','—'],['LEVE3','—','R$ 3.499','—','—'],['MLSA13','—','R$ 1.677','—','—'],['MATO3','—','R$ 23','—','—'],['PETR4','—','R$ 14.796','—','—'],['PRIO3','—','R$ 10.263','—','—'],['SAPR4','—','R$ 7.659','—','—'],['GOGL34','—','R$ 1.734','—','—'],['sub','Subtotal Mercado Financeiro','—','R$ 284.784','—','—'],['hd','Outros'],['Cx Carro Mariana','—','R$ 63.028','—','—'],['Chevrolet Onix 2017','—','R$ 54.682','—','—'],['Honda Fit 2012','—','R$ 44.012','—','—'],['Cx Projeto Baby','—','R$ 19.939','—','—'],['Cx Carro Morona','—','R$ 10.614','—','—'],['Cx Prev Viagem','—','R$ 5.911','—','—'],['sub','Subtotal Outros','—','R$ 198.186','—','—'],['tot','Total Ativos','—','R$ 482.970','—','—'],['hd','Passivos'],['tot','Total Passivos','—','—','—','—'],['liq','Patrimônio Líquido','—','R$ 482.970','—','—']];
-  const tb2=tbl.querySelector('tbody');tb2.innerHTML='';
-  rr.forEach(r=>{if(r[0]==='hd')tb2.innerHTML+='<tr class="tr-hd"><td colspan="5" style="padding:.5rem .8rem">'+r[1]+'</td></tr>';else if(r[0]==='sub')tb2.innerHTML+='<tr class="tr-sub"><td>'+r[1]+'</td><td class="r">'+r[2]+'</td><td class="r pos">'+r[3]+'</td><td class="r">'+r[4]+'</td><td class="r">'+r[5]+'</td></tr>';else if(r[0]==='tot')tb2.innerHTML+='<tr class="tr-tot"><td>'+r[1]+'</td><td class="r">'+r[2]+'</td><td class="r">'+r[3]+'</td><td class="r">'+r[4]+'</td><td class="r">'+r[5]+'</td></tr>';else if(r[0]==='liq')tb2.innerHTML+='<tr class="tr-liq"><td>'+r[1]+'</td><td class="r">'+r[2]+'</td><td class="r">'+r[3]+'</td><td class="r">'+r[4]+'</td><td class="r">'+r[5]+'</td></tr>';else tb2.innerHTML+='<tr><td style="color:var(--t2)">'+r[0]+'</td><td class="r">'+r[1]+'</td><td class="r pos">'+r[2]+'</td><td class="r">'+r[3]+'</td><td class="r">'+r[4]+'</td></tr>';});
-  setTimeout(sincronizar,3000);
+var M=["Janeiro","Fevereiro","Marco","Abril","Maio","Junho","Julho","Agosto","Setembro","Outubro","Novembro","Dezembro"];
+var MS=["Jan","Fev","Mar","Abr","Mai","Jun","Jul","Ago","Set","Out","Nov","Dez"];
+function brl(v){return v.toLocaleString("pt-BR",{style:"currency",currency:"BRL"});}
+function tab(id,btn){document.querySelectorAll(".tab").forEach(function(e){e.classList.remove("active");});document.querySelectorAll(".nb").forEach(function(e){e.classList.remove("active");});document.getElementById("tab-"+id).classList.add("active");btn.classList.add("active");}
+var cP2,cB2,cPA2,cR2;
+var AL=[17900,17900,17900,17900,17900,17900,0,0,0,0,0,0];
+var DV=[0,123.97,2255.12,0,287.93,0,0,0,0,0,0,0];
+var SN=[56.10,917.15,725.90,1008.40,608.60,0,0,0,0,0,0,0];
+var AP=[40000,7400,9000,13600,8608,0,0,0,0,0,0,0];
+var CL=[{n:"Mercado Financeiro",v:284784},{n:"Outros",v:198186}];
+var AV=[{n:"Cx ProPay Selic CDI",v:81679,c:"MF"},{n:"Cx Carro Mariana",v:63028,c:"O"},{n:"Chevrolet Onix 2017",v:54682,c:"O"},{n:"Honda Fit 2012",v:44012,c:"O"},{n:"Tesouro Prefixado 2035",v:34662,c:"MF"},{n:"BBSE3",v:24574,c:"MF"},{n:"BBAS3",v:22300,c:"MF"},{n:"Cx Projeto Baby",v:19939,c:"O"},{n:"ITUB4",v:17202,c:"MF"},{n:"PETR4",v:14796,c:"MF"},{n:"Tesouro Selic 2031",v:11788,c:"MF"},{n:"Cx Carro Morona",v:10614,c:"O"},{n:"Tesouro IPCA+ 2035",v:10379,c:"MF"},{n:"PRIO3",v:10263,c:"MF"},{n:"CMIG4",v:8305,c:"MF"},{n:"SAPR4",v:7659,c:"MF"},{n:"CGRA4",v:6102,c:"MF"},{n:"Cx Prev Viagem",v:5911,c:"O"},{n:"LEVE3",v:3499,c:"MF"},{n:"GOGL34",v:1734,c:"MF"},{n:"MLSA13",v:1677,c:"MF"},{n:"MATO3",v:23,c:"MF"}];
+var ALR=[["jan/26","Comercial","Galpao","Aparecida de Goiania GO",4000,"10/01/2026",4000,"Recebido"],["jan/26","Residencial","Galpao","Goiania GO",3500,"10/01/2026",3500,"Recebido"],["jan/26","Residencial","Casa Cond.","Goiania GO",8000,"05/01/2026",8000,"Recebido"],["jan/26","Residencial","Apartamento","Goiania GO",2400,"05/01/2026",2400,"Recebido"],["fev/26","Comercial","Galpao","Aparecida de Goiania GO",4000,"10/02/2026",4000,"Recebido"],["fev/26","Residencial","Galpao","Goiania GO",3500,"10/02/2026",3500,"Recebido"],["fev/26","Residencial","Casa Cond.","Goiania GO",8000,"05/02/2026",8000,"Recebido"],["fev/26","Residencial","Apartamento","Goiania GO",2400,"05/02/2026",2400,"Recebido"],["mar/26","Comercial","Galpao","Aparecida de Goiania GO",4000,"10/03/2026",4000,"Recebido"],["mar/26","Residencial","Galpao","Goiania GO",3500,"10/03/2026",3500,"Recebido"],["mar/26","Residencial","Casa Cond.","Goiania GO",8000,"05/03/2026",8000,"Recebido"],["mar/26","Residencial","Apartamento","Goiania GO",2400,"05/03/2026",2400,"Recebido"],["abr/26","Comercial","Galpao","Aparecida de Goiania GO",4000,"10/04/2026",4000,"Recebido"],["abr/26","Residencial","Galpao","Goiania GO",3500,"10/04/2026",3500,"Recebido"],["abr/26","Residencial","Casa Cond.","Goiania GO",8000,"05/04/2026",8000,"Recebido"],["abr/26","Residencial","Apartamento","Goiania GO",2400,"05/04/2026",2400,"Recebido"],["mai/26","Comercial","Galpao","Aparecida de Goiania GO",4000,"10/05/2026",4000,"Recebido"],["mai/26","Residencial","Galpao","Goiania GO",3500,"10/05/2026",3500,"Recebido"],["mai/26","Residencial","Casa Cond.","Goiania GO",8000,"05/05/2026",8000,"Recebido"],["mai/26","Residencial","Apartamento","Goiania GO",2400,"05/05/2026",2400,"Recebido"],["jun/26","Comercial","Galpao","Aparecida de Goiania GO",4000,"10/06/2026",4000,"Recebido"],["jun/26","Residencial","Galpao","Goiania GO",3500,"10/06/2026",3500,"Recebido"],["jun/26","Residencial","Casa Cond.","Goiania GO",8000,"05/06/2026",8000,"Recebido"],["jun/26","Residencial","Apartamento","Goiania GO",2400,"05/06/2026",2400,"Recebido"],["jul/26","Comercial","Galpao","Aparecida de Goiania GO",4000,"10/07/2026",0,"A receber"],["jul/26","Residencial","Galpao","Goiania GO",3500,"10/07/2026",0,"A receber"],["jul/26","Residencial","Casa Cond.","Goiania GO",8000,"05/07/2026",0,"A receber"],["jul/26","Residencial","Apartamento","Goiania GO",2400,"05/07/2026",0,"A receber"]];
+var DVR=[["PETR4","Juros cap.prop.","Petroleo Gas","20/02/2026",304,"--","--","R$ 121,36","Realizado"],["PETR4","Dividendos","Petroleo Gas","20/02/2026",304,"--","--","R$ 0,60","Realizado"],["BBSE3","Dividendos","Financeiro","02/03/2026",706,"R$ 9,02","--","R$ 1.800,27","Realizado"],["ITUB4","Rendimentos","Financeiro","20/03/2026",400,"R$ 1,33","--","R$ 5,00","Realizado"],["VALE3","Dividendos","Mineracao","04/03/2026",78,"R$ 18,36","--","R$ 104,06","Realizado"],["BBAS3","Dividendos","Financeiro","05/03/2026",500,"R$ 18,92","--","R$ 110,54","Realizado"],["BBAS3","Juros cap.prop.","Financeiro","11/03/2026",500,"R$ 6,12","--","R$ 28,94","Realizado"],["GOGL34","Dividendos","Comunicacao","01/04/2026",14,"--","--","R$ 0,86","Realizado"],["PETR4","Dividendos","Petroleo Gas","20/03/2026",304,"R$ 7,98","--","R$ 40,11","Realizado"],["LEVE3","Dividendos","Outros","27/03/2026",100,"R$ 14,27","--","R$ 178,19","Realizado"],["LEVE3","Dividendos","Outros","30/04/2026",100,"R$ 80,51","--","R$ 80,51","Realizado"],["BBAS3","Juros cap.prop.","Financeiro","01/06/2026",500,"R$ 0,38","--","R$ 2,01","Projetado"],["CMIG4","Dividendos","Serv.Basicos","30/10/2026",500,"R$ 59,08","--","R$ 59,08","Projetado"],["CMIG4","Juros cap.prop.","Serv.Basicos","30/11/2026",500,"R$ 8,51","--","R$ 48,88","Projetado"],["CMIG4","Juros cap.prop.","Serv.Basicos","30/11/2026",500,"R$ 3,82","--","R$ 48,88","Projetado"]];
+var SNR=[[1,"BBAS3","27/01/2026","BBASB271","R$27,11","-8,88%","CALL",100,"R$30,00","28/01/2026","Expirada","1,13%","R$30,60","1,18%"],[2,"BBAS3","27/01/2026","BBASN233","R$23,24","1,66%","PUT",100,"R$30,00","28/01/2026","Expirada","2,00%","R$25,50","1,98%"],[3,"BBAS3","02/02/2026","BBASN271","R$33,65","1,90%","PUT",400,"R$240,00","20/02/2026","Expirada","1,81%","R$198,79","1,98%"],[4,"ITUB4","02/02/2026","ITUB4","R$34,57","2,03%","PUT",500,"R$90,00","20/02/2026","Expirada","1,59%","R$86,20","1,58%"],[5,"VALE3","02/02/2026","VALEX3","R$75,40","3,99%","PUT",500,"R$360,00","20/02/2026","Expirada","1,42%","R$204,18","1,58%"]];
+function ini(){
+  var cc=["#2563b8","#7ab8e8"],tC=CL.reduce(function(a,b){return a+b.v;},0);
+  if(cP2)cP2.destroy();
+  cP2=new Chart(document.getElementById("cP"),{type:"doughnut",data:{labels:CL.map(function(c){return c.n;}),datasets:[{data:CL.map(function(c){return c.v;}),backgroundColor:cc,borderWidth:2,borderColor:"#0b0e17",hoverOffset:4}]},options:{responsive:true,maintainAspectRatio:false,cutout:"72%",plugins:{legend:{display:false},tooltip:{callbacks:{label:function(i){return " "+brl(i.raw);}}}}}});
+  if(cB2)cB2.destroy();
+  cB2=new Chart(document.getElementById("cB"),{type:"bar",data:{labels:CL.map(function(c){return c.n;}),datasets:[{data:CL.map(function(c){return c.v;}),backgroundColor:cc,borderRadius:4,borderWidth:0}]},options:{responsive:true,maintainAspectRatio:false,indexAxis:"y",plugins:{legend:{display:false},tooltip:{callbacks:{label:function(i){return " "+brl(i.raw);}}}},scales:{x:{ticks:{color:"#424858",font:{size:9},callback:function(v){return v>=1000?(v/1000).toFixed(0)+"k":v;}},grid:{color:"rgba(255,255,255,.03)"},border:{display:false}},y:{ticks:{color:"#7a8196",font:{size:9}},grid:{display:false},border:{display:false}}}}});
+  var lc=document.getElementById("lC");lc.innerHTML="";
+  CL.forEach(function(c,i){lc.innerHTML+="<span style=\"display:flex;align-items:center;gap:5px\"><span style=\"width:8px;height:1px;background:"+cc[i]+";display:inline-block\"></span>"+c.n+" <strong style=\"color:var(--text);font-weight:500\">"+((c.v/tC)*100).toFixed(1)+"%</strong></span>";});
+  var av2=[].concat(AV).sort(function(a,b){return b.v-a.v;}),tA=av2.reduce(function(a,b){return a+b.v;},0);
+  var aC=["#1a3a6e","#1e4280","#224a92","#275eb8","#2b66c8","#3070d4","#3a7ed8","#447edc","#4e8ae6","#5896ec","#62a0f0","#6cacf4","#76b6f8","#7abce8","#6eb0e0","#5698d0","#4a8cc8","#3e80c0","#3274b8","#2668b0","#1a5ca8","#1050a0"];
+  if(cPA2)cPA2.destroy();
+  cPA2=new Chart(document.getElementById("cPA"),{type:"doughnut",data:{labels:av2.map(function(a){return a.n;}),datasets:[{data:av2.map(function(a){return a.v;}),backgroundColor:av2.map(function(a,i){return aC[i%22];}),borderWidth:1,borderColor:"#0b0e17",hoverOffset:3}]},options:{responsive:true,maintainAspectRatio:false,cutout:"60%",plugins:{legend:{display:false},tooltip:{callbacks:{label:function(i){return " "+brl(i.raw)+" ("+((i.raw/tA)*100).toFixed(1)+"%)";}}}}}}); 
+  var tb=document.getElementById("tbA");tb.innerHTML="";
+  av2.forEach(function(a,i){var p=((a.v/tA)*100).toFixed(1);tb.innerHTML+="<tr><td style=\"display:flex;align-items:center;gap:.4rem;padding:.3rem .4rem\"><span style=\"width:5px;height:5px;border-radius:50%;background:"+aC[i%22]+";flex-shrink:0;display:inline-block\"></span><span style=\"color:var(--t2)\">"+a.n+"</span><span class=\"ct\">("+(a.c==="MF"?"MF":"Outros")+")</span></td><td style=\"text-align:right;padding:.3rem .4rem;color:var(--text)\">"+brl(a.v)+"</td><td style=\"text-align:right;padding:.3rem .4rem;color:var(--t3)\">"+p+"%</td></tr>";});
+  var aT=AL.reduce(function(a,b){return a+b;},0),dT=DV.reduce(function(a,b){return a+b;},0),sT=SN.reduce(function(a,b){return a+b;},0),tR=aT+dT+sT,mR=AL.filter(function(v){return v>0;}).length||6,med=tR/mR;
+  var aP=((aT/tR)*100).toFixed(1),dP=((dT/tR)*100).toFixed(1),sP=((sT/tR)*100).toFixed(1);
+  document.getElementById("cR4").innerHTML="<div class=\"card ca\"><div class=\"lbl\">Alugueis recebidos</div><div class=\"val\" style=\"color:var(--teal2)\">"+brl(aT)+"</div><div class=\"sub\">"+mR+" meses</div></div><div class=\"card ca\"><div class=\"lbl\">Dividendos realizados</div><div class=\"val\" style=\"color:var(--b3)\">"+brl(dT)+"</div></div><div class=\"card ca\"><div class=\"lbl\">Sinteticos realizados</div><div class=\"val\" style=\"color:var(--b4)\">"+brl(sT)+"</div></div><div class=\"card\"><div class=\"lbl\">Media mensal</div><div class=\"val green\">"+brl(med)+"</div></div>";
+  document.getElementById("sB").innerHTML="<div style=\"width:"+aP+"%;background:var(--teal)\"></div><div style=\"width:"+dP+"%;background:var(--b2)\"></div><div style=\"width:"+sP+"%;background:var(--b4)\"></div>";
+  document.getElementById("sL").innerHTML="<span style=\"color:var(--teal2)\">Alugueis "+aP+"%</span><span style=\"color:var(--b3)\">Dividendos "+dP+"%</span><span style=\"color:var(--b4)\">Sinteticos "+sP+"%</span>";
+  document.getElementById("rL").innerHTML="<span>Alugueis</span><span>Dividendos</span><span>Sinteticos</span>";
+  if(cR2)cR2.destroy();
+  cR2=new Chart(document.getElementById("cR"),{type:"bar",data:{labels:MS,datasets:[{label:"A",data:AL,backgroundColor:"#1a6a5a",borderRadius:2,stack:"r"},{label:"D",data:DV,backgroundColor:"#2563b8",borderRadius:2,stack:"r"},{label:"S",data:SN,backgroundColor:"#7ab8e8",borderRadius:2,stack:"r"}]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false},tooltip:{callbacks:{label:function(i){return " "+brl(i.raw);}}}},scales:{x:{ticks:{color:"#424858",font:{size:9}},grid:{display:false},stacked:true,border:{display:false}},y:{ticks:{color:"#424858",font:{size:9},callback:function(v){return v>=1000?(v/1000).toFixed(0)+"k":v;}},grid:{color:"rgba(255,255,255,.03)"},stacked:true,border:{display:false}}}}});
+  var fs=[{m:2500,l:"Fase 01"},{m:5000,l:"Fase 02"},{m:10000,l:"Fase 03"},{m:20000,l:"Fase 04 - Liberdade"}];
+  var iw=document.getElementById("iW");iw.innerHTML="";
+  fs.forEach(function(fase,i){var p=Math.min((med/fase.m)*100,100),done=med>=fase.m,next=!done&&(i===0||(med>=fs[i-1].m)),lock=!done&&!next;iw.innerHTML+="<div class=\"fase "+(done||next?"fa":"")+"\"><div class=\"frow\"><span class=\"ft\" style=\"color:"+(done?"var(--green)":next?"var(--gold)":"var(--t2)")+"\">"+fase.l+"</span><span class=\"tg "+(done?"tgd":next?"tga":"tgl")+"\">"+(done?"Concluida":next?"Em andamento":"Bloqueada")+"</span></div><div class=\"fm\" style=\"color:"+(lock?"var(--t3)":"var(--t2)")+"\">Meta <strong style=\"color:"+(lock?"var(--t3)":"var(--text)")+"\">"+brl(fase.m)+"/mes</strong>"+(next?" Atual <strong style=\"color:var(--green)\">"+brl(med)+"</strong>":"")+"</div><div class=\"fb\"><div class=\"ff\" style=\"width:"+p+"%;background:"+(done?"var(--green)":next?"linear-gradient(90deg,var(--gold),var(--gold2))":"var(--s4)")+"\"</div></div><div class=\"fp\" style=\"color:"+(done?"var(--green)":next?"var(--gold)":"var(--t3)")+"\">"+(done?"Renda supera meta":next?p.toFixed(1)+"% concluido":"Disponivel apos fase anterior")+"</div></div>";});
+  var tbR2=document.getElementById("tbR");tbR2.innerHTML="";var tA2=0,tD2=0,tS2=0;
+  M.forEach(function(mes,i){var av3=AL[i],dv=DV[i],sv=SN[i],tot=av3+dv+sv;tA2+=av3;tD2+=dv;tS2+=sv;tbR2.innerHTML+="<tr><td style=\"color:"+(tot===0?"var(--t3)":"var(--text)")+"\">"+mes+"</td><td class=\"r "+(av3>0?"pos":"")+"\">"+(av3>0?brl(av3):"--")+"</td><td class=\"r "+(dv>0?"pos":"")+"\">"+(dv>0?brl(dv):"--")+"</td><td class=\"r "+(sv>0?"pos":"")+"\">"+(sv>0?brl(sv):"--")+"</td><td class=\"r "+(tot>0?"pos":"")+"\">"+(tot>0?brl(tot):"--")+"</td></tr>";});
+  tbR2.innerHTML+="<tr class=\"ts\"><td>Total 2026</td><td class=\"r pos\">"+brl(tA2)+"</td><td class=\"r pos\">"+brl(tD2)+"</td><td class=\"r pos\">"+brl(tS2)+"</td><td class=\"r pos\">"+brl(tA2+tD2+tS2)+"</td></tr><tr class=\"ta\"><td>Media mensal</td><td class=\"r\">"+brl(tA2/mR)+"</td><td class=\"r\">"+brl(tD2/mR)+"</td><td class=\"r\">"+brl(tS2/mR)+"</td><td class=\"r green\">"+brl((tA2+tD2+tS2)/mR)+"</td></tr>";
+  var apT=AP.reduce(function(a,b){return a+b;},0),mAp=AP.filter(function(v){return v>0;}).length||5;
+  document.getElementById("cA3").innerHTML="<div class=\"card ca\"><div class=\"lbl\">Total Aportado 2026</div><div class=\"val gold\">"+brl(apT)+"</div></div><div class=\"card\"><div class=\"lbl\">Media de Aporte</div><div class=\"val\">"+brl(apT/mAp)+"</div><div class=\"sub\">"+mAp+" meses</div></div><div class=\"card\"><div class=\"lbl\">Meses com Aporte</div><div class=\"val\">"+mAp+" <span style=\"font-size:.9rem;color:var(--t2)\">de 12</span></div></div>";
+  var tbAp2=document.getElementById("tbAp");tbAp2.innerHTML="";var ac=0;
+  M.forEach(function(mes,i){var v=AP[i]||0;if(v>0)ac+=v;tbAp2.innerHTML+="<tr><td style=\"color:"+(v===0?"var(--t3)":"var(--text)")+"\">"+mes+"</td><td class=\"r "+(v>0?"gold":"")+"\">"+(v>0?brl(v):"--")+"</td><td class=\"r\" style=\"color:"+(v===0?"var(--t3)":"var(--text)")+"\">"+brl(ac)+"</td></tr>";});
+  tbAp2.innerHTML+="<tr class=\"tt\"><td>Total 2026</td><td class=\"r\">"+brl(apT)+"</td><td class=\"r\">"+brl(apT)+"</td></tr>";
+  var tbAl2=document.getElementById("tbAl");tbAl2.innerHTML="";var alT=0;
+  ALR.forEach(function(r){var ok=r[7]==="Recebido";if(ok)alT+=r[6];tbAl2.innerHTML+="<tr><td>"+r[0]+"</td><td>"+r[1]+"</td><td>"+r[2]+"</td><td style=\"color:var(--t2)\">"+r[3]+"</td><td class=\"r pos\">"+brl(r[4])+"</td><td class=\"r\">"+r[5]+"</td><td class=\"r "+(ok?"pos":"")+"\"> "+(ok?brl(r[6]):"--")+"</td><td><span class=\""+(ok?"rc":"pr")+"\">"+r[7]+"</span></td></tr>";});
+  document.getElementById("cAlg").innerHTML="<div class=\"card ca\"><div class=\"lbl\">Total Recebido 2026</div><div class=\"val\" style=\"color:var(--teal2)\">"+brl(alT)+"</div></div><div class=\"card\"><div class=\"lbl\">Mensal Fixo</div><div class=\"val\">R$ 17.900,00</div><div class=\"sub\">4 imoveis ativos</div></div><div class=\"card\"><div class=\"lbl\">Meses Recebidos</div><div class=\"val\">6 de 12</div></div><div class=\"card\"><div class=\"lbl\">Proximo Recebimento</div><div class=\"val\" style=\"color:var(--b3)\">Jul/2026</div></div>";
+  var tbDv2=document.getElementById("tbDv");tbDv2.innerHTML="";var rl=0,pj=0;
+  DVR.forEach(function(r){var ok=r[8]==="Realizado",fut=r[8]==="Projetado";if(ok)rl+=parseFloat(r[7].replace(/[R$ .]/g,"").replace(",","."))||0;if(fut)pj+=parseFloat(r[7].replace(/[R$ .]/g,"").replace(",","."))||0;tbDv2.innerHTML+="<tr><td style=\"color:var(--gold);font-weight:500\">"+r[0]+"</td><td>"+r[1]+"</td><td>"+r[2]+"</td><td>"+r[3]+"</td><td class=\"r\">"+r[4]+"</td><td class=\"r\">"+r[5]+"</td><td class=\"r\">"+r[6]+"</td><td class=\"r "+(ok?"pos":"")+"\" style=\"font-weight:500\">"+r[7]+"</td><td><span class=\""+(ok?"ok":"pr")+"\">"+r[8]+"</span></td></tr>";});
+  document.getElementById("cDv4").innerHTML="<div class=\"card\"><div class=\"lbl\">Realizados</div><div class=\"val green\">"+brl(rl)+"</div></div><div class=\"card\"><div class=\"lbl\">Projetados</div><div class=\"val gold\">"+brl(pj)+"</div></div><div class=\"card ca\"><div class=\"lbl\">Total Geral</div><div class=\"val\">"+brl(rl+pj)+"</div></div><div class=\"card\"><div class=\"lbl\">Proximo Pagamento</div><div class=\"val\" style=\"color:var(--b3)\">22/06/2026</div></div>";
+  var tbSn2=document.getElementById("tbSn");tbSn2.innerHTML="";
+  SNR.forEach(function(r){var isC=r[6]==="CALL",p2=parseFloat(r[5].replace("%","").replace(",","."));tbSn2.innerHTML+="<tr><td style=\"color:var(--t3)\">"+r[0]+"</td><td style=\"color:var(--gold);font-weight:500\">"+r[1]+"</td><td>"+r[2]+"</td><td style=\"color:var(--t2)\">"+r[3]+"</td><td class=\"r\">"+r[4]+"</td><td class=\"r "+(p2>=0?"pos":"neg")+"\">"+r[5]+"</td><td><span class=\""+(isC?"cl":"pt")+"\">"+r[6]+"</span></td><td class=\"r\">"+r[7]+"</td><td class=\"r\">"+r[8]+"</td><td>"+r[9]+"</td><td style=\"color:var(--t2)\">"+r[10]+"</td><td class=\"r\">"+r[11]+"</td><td class=\"r pos\" style=\"font-weight:500\">"+r[12]+"</td><td class=\"r gold\">"+r[13]+"</td></tr>";});
+  document.getElementById("cSn4").innerHTML="<div class=\"card ca\"><div class=\"lbl\">Total Recebido</div><div class=\"val gold\">"+brl(3899)+"</div></div><div class=\"card\"><div class=\"lbl\">Resultado Liquido</div><div class=\"val green\">"+brl(3314.15)+"</div></div><div class=\"card\"><div class=\"lbl\">% Liquida Mensal</div><div class=\"val gold\">1,46%</div><div class=\"sub\">Selic put + lucro call</div></div><div class=\"card\"><div class=\"lbl\">% Liquida Anual</div><div class=\"val gold\">19,02%</div></div>";
+  document.getElementById("cSn3").innerHTML="<div class=\"card\"><div class=\"lbl\">Operacoes Abertas</div><div class=\"val\" style=\"color:var(--b3)\">5</div></div><div class=\"card\"><div class=\"lbl\">Operacoes Encerradas</div><div class=\"val\">7</div></div><div class=\"card\"><div class=\"lbl\">Ganho Valorizacao</div><div class=\"val green\">R$ 811,80</div></div>";
+  var tbl2=document.getElementById("tRel");
+  tbl2.querySelector("thead").innerHTML="<tr><th>Categoria</th><th class=\"r\">Q1 26</th><th class=\"r\">Q2 26</th><th class=\"r\">Q3 26</th><th class=\"r\">Q4 26</th></tr>";
+  var rr=[["hd","Mercado Financeiro"],["Cx ProPay Selic CDI","--","R$ 81.679","--","--"],["Tesouro Prefixado 2035","--","R$ 34.663","--","--"],["Tesouro IPCA+ 2035","--","R$ 10.379","--","--"],["Tesouro Selic 2031","--","R$ 11.788","--","--"],["BBAS3","--","R$ 22.300","--","--"],["BBSE3","--","R$ 24.574","--","--"],["CGRA4","--","R$ 6.103","--","--"],["CMIG4","--","R$ 8.305","--","--"],["ITUB4","--","R$ 17.202","--","--"],["LEVE3","--","R$ 3.499","--","--"],["MLSA13","--","R$ 1.677","--","--"],["MATO3","--","R$ 23","--","--"],["PETR4","--","R$ 14.796","--","--"],["PRIO3","--","R$ 10.263","--","--"],["SAPR4","--","R$ 7.659","--","--"],["GOGL34","--","R$ 1.734","--","--"],["sub","Subtotal MF","--","R$ 284.784","--","--"],["hd","Outros"],["Cx Carro Mariana","--","R$ 63.028","--","--"],["Chevrolet Onix 2017","--","R$ 54.682","--","--"],["Honda Fit 2012","--","R$ 44.012","--","--"],["Cx Projeto Baby","--","R$ 19.939","--","--"],["Cx Carro Morona","--","R$ 10.614","--","--"],["Cx Prev Viagem","--","R$ 5.911","--","--"],["sub","Subtotal Outros","--","R$ 198.186","--","--"],["tot","Total Ativos","--","R$ 482.970","--","--"],["hd","Passivos"],["tot","Total Passivos","--","--","--","--"],["liq","Patrimonio Liquido","--","R$ 482.970","--","--"]];
+  var tb3=tbl2.querySelector("tbody");tb3.innerHTML="";
+  rr.forEach(function(r){if(r[0]==="hd")tb3.innerHTML+="<tr class=\"th\"><td colspan=\"5\" style=\"padding:.5rem .8rem\">"+r[1]+"</td></tr>";else if(r[0]==="sub")tb3.innerHTML+="<tr class=\"ts\"><td>"+r[1]+"</td><td class=\"r\">"+r[2]+"</td><td class=\"r pos\">"+r[3]+"</td><td class=\"r\">"+r[4]+"</td><td class=\"r\">"+r[5]+"</td></tr>";else if(r[0]==="tot")tb3.innerHTML+="<tr class=\"tt\"><td>"+r[1]+"</td><td class=\"r\">"+r[2]+"</td><td class=\"r\">"+r[3]+"</td><td class=\"r\">"+r[4]+"</td><td class=\"r\">"+r[5]+"</td></tr>";else if(r[0]==="liq")tb3.innerHTML+="<tr class=\"tl\"><td>"+r[1]+"</td><td class=\"r\">"+r[2]+"</td><td class=\"r\">"+r[3]+"</td><td class=\"r\">"+r[4]+"</td><td class=\"r\">"+r[5]+"</td></tr>";else tb3.innerHTML+="<tr><td style=\"color:var(--t2)\">"+r[0]+"</td><td class=\"r\">"+r[1]+"</td><td class=\"r pos\">"+r[2]+"</td><td class=\"r\">"+r[3]+"</td><td class=\"r\">"+r[4]+"</td></tr>";});
+  setTimeout(sync,3000);
 }
-async function sincronizar(){
-  document.getElementById('syncLabel').textContent='Sincronizando...';
+async function sync(){
+  document.getElementById("lbl").textContent="Sincronizando...";
   try{
-    const res=await fetch('https://script.google.com/macros/s/AKfycbz9s-nvIoatmd5l4Ntx_FdUPU4EerxpP5cJDzJ4prgsl1MtRHtt_jCpdvLPWOX7BICyCQ/exec',{signal:AbortSignal.timeout(15000)});
+    var res=await fetch("https://script.google.com/macros/s/AKfycbz9s-nvIoatmd5l4Ntx_FdUPU4EerxpP5cJDzJ4prgsl1MtRHtt_jCpdvLPWOX7BICyCQ/exec",{signal:AbortSignal.timeout(15000)});
     await res.json();
-    document.getElementById('syncLabel').textContent='Atualizado';
-    toast('✓ Sincronizado com a planilha');
-  }catch(e){document.getElementById('syncLabel').textContent='Jun/2026';}
+    document.getElementById("lbl").textContent="Atualizado";
+  }catch(e){document.getElementById("lbl").textContent="Jun/2026";}
 }
-// Aguarda Chart.js carregar antes de iniciar
-if(typeof Chart!=='undefined'){iniciar();}else{document.querySelector('script[src*="chart"]').addEventListener('load',iniciar);}
+if(typeof Chart!=="undefined"){ini();}else{document.querySelector("script[src*=chart]").addEventListener("load",ini);}
 </script>
 </body>
 </html>
