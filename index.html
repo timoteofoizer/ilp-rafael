@@ -36,7 +36,7 @@ body{font-family:"Segoe UI",system-ui,sans-serif;background:var(--bg);color:var(
 .atbl{width:100%;border-collapse:collapse;font-size:.68rem}
 .atbl td{padding:.32rem .4rem;border-bottom:1px solid #f1f5f9;vertical-align:middle}
 .sbar{height:8px;border-radius:4px;overflow:hidden;display:flex;margin:.65rem 0 .4rem}
-.slbs{display:flex;justify-content:space-between;font-size:.63rem;gap:.5rem;flex-wrap:wrap;color:var(--t2)}
+.slbs{display:flex;justify-content:space-between;font-size:.82rem;gap:.5rem;flex-wrap:wrap;color:var(--t2)}
 .ilf{display:flex;flex-direction:column;gap:.5rem;margin-top:.5rem}
 .fase{border-radius:var(--rs);padding:.85rem 1rem;border:1px solid #e2e8f0;background:#f8fafc}
 .fa{border-color:rgba(37,99,235,.3);background:linear-gradient(135deg,rgba(37,99,235,.05),#fff)}
@@ -96,21 +96,21 @@ body{font-family:"Segoe UI",system-ui,sans-serif;background:var(--bg);color:var(
       <div class="card ca"><div class="lbl">Patrimonio Liquido</div><div class="val blue lg" id="vL">R$ 4.487.939</div><div class="sub">Ativos menos Passivos</div></div>
     </div>
     <div class="g2">
-      <div class="card"><div class="lbl">Por classe de ativo</div>
-        <div style="display:flex;gap:1rem;align-items:center">
-          <div style="width:130px;flex-shrink:0;height:155px;position:relative"><canvas id="cP"></canvas></div>
-          <div style="flex:1"><div style="height:155px"><canvas id="cB"></canvas></div></div>
+      <div class="card"><div class="lbl" style="font-size:.75rem">Por classe de ativo</div>
+        <div style="display:flex;gap:1.2rem;align-items:center">
+          <div style="width:170px;flex-shrink:0;height:220px;position:relative"><canvas id="cP"></canvas></div>
+          <div style="flex:1"><div style="height:220px"><canvas id="cB"></canvas></div></div>
         </div>
-        <div id="lC" style="display:flex;flex-wrap:wrap;gap:12px;margin-top:10px;font-size:.65rem;color:var(--t2)"></div>
+        <div id="lC" style="display:flex;flex-wrap:wrap;gap:14px;margin-top:14px;font-size:.85rem;color:var(--t2)"></div>
       </div>
-      <div class="card"><div class="lbl">Detalhamento por ativo</div>
-        <div style="display:flex;gap:1rem">
-          <div style="width:125px;flex-shrink:0;height:185px;position:relative"><canvas id="cPA"></canvas></div>
-          <div style="flex:1;max-height:205px;overflow-y:auto">
-            <table class="atbl"><thead><tr>
-              <th style="padding:.3rem .4rem;color:var(--b2);font-size:.59rem;font-weight:600;text-transform:uppercase;text-align:left;border-bottom:2px solid #e2e8f0">Ativo</th>
-              <th style="padding:.3rem .4rem;color:var(--b2);font-size:.59rem;font-weight:600;text-transform:uppercase;text-align:right;border-bottom:2px solid #e2e8f0">Valor</th>
-              <th style="padding:.3rem .4rem;color:var(--b2);font-size:.59rem;font-weight:600;text-transform:uppercase;text-align:right;border-bottom:2px solid #e2e8f0">%</th>
+      <div class="card"><div class="lbl" style="font-size:.75rem">Detalhamento por ativo</div>
+        <div style="display:flex;gap:1.2rem">
+          <div style="width:165px;flex-shrink:0;height:255px;position:relative"><canvas id="cPA"></canvas></div>
+          <div style="flex:1">
+            <table class="atbl" style="font-size:.85rem"><thead><tr>
+              <th style="padding:.4rem .5rem;color:var(--b2);font-size:.72rem;font-weight:600;text-transform:uppercase;text-align:left;border-bottom:2px solid #e2e8f0">Ativo</th>
+              <th style="padding:.4rem .5rem;color:var(--b2);font-size:.72rem;font-weight:600;text-transform:uppercase;text-align:right;border-bottom:2px solid #e2e8f0">Valor</th>
+              <th style="padding:.4rem .5rem;color:var(--b2);font-size:.72rem;font-weight:600;text-transform:uppercase;text-align:right;border-bottom:2px solid #e2e8f0">%</th>
             </tr></thead><tbody id="tbA"></tbody></table>
           </div>
         </div>
@@ -123,7 +123,7 @@ body{font-family:"Segoe UI",system-ui,sans-serif;background:var(--bg);color:var(
         <div class="sbar" style="margin-top:.8rem" id="sB"></div>
         <div class="slbs" id="sL"></div>
         <div style="height:195px;margin-top:1rem"><canvas id="cR"></canvas></div>
-        <div id="rL" style="display:flex;gap:1.2rem;margin-top:.75rem;font-size:.63rem;color:var(--t2);flex-wrap:wrap"></div>
+        <div id="rL" style="display:flex;gap:1.2rem;margin-top:.75rem;font-size:.78rem;color:var(--t2);flex-wrap:wrap"></div>
       </div>
       <div class="card ca"><div class="lbl">Indice de Liberdade Financeira</div><div class="ilf" id="iW"></div></div>
     </div>
@@ -163,7 +163,7 @@ function ini(){
   if(cP2)cP2.destroy();
   cP2=new Chart(document.getElementById("cP"),{type:"doughnut",data:{labels:CL.map(function(c){return c.n;}),datasets:[{data:CL.map(function(c){return c.v;}),backgroundColor:cc,borderWidth:2,borderColor:"#fff",hoverOffset:4}]},options:{responsive:true,maintainAspectRatio:false,cutout:"72%",plugins:{legend:{display:false},tooltip:{callbacks:{label:function(i){return " "+brl(i.raw);}}}}}});
   if(cB2)cB2.destroy();
-  cB2=new Chart(document.getElementById("cB"),{type:"bar",data:{labels:CL.map(function(c){return c.n;}),datasets:[{data:CL.map(function(c){return c.v;}),backgroundColor:cc,borderRadius:6,borderWidth:0}]},options:{responsive:true,maintainAspectRatio:false,indexAxis:"y",plugins:{legend:{display:false},tooltip:{callbacks:{label:function(i){return " "+brl(i.raw);}}}},scales:{x:{ticks:{color:"#94a3b8",font:{size:9},callback:function(v){return v>=1000?(v/1000).toFixed(0)+"k":v;}},grid:{color:"rgba(37,99,235,.07)"},border:{display:false}},y:{ticks:{color:"#475569",font:{size:10}},grid:{display:false},border:{display:false}}}}});
+  cB2=new Chart(document.getElementById("cB"),{type:"bar",data:{labels:CL.map(function(c){return c.n;}),datasets:[{data:CL.map(function(c){return c.v;}),backgroundColor:cc,borderRadius:6,borderWidth:0}]},options:{responsive:true,maintainAspectRatio:false,indexAxis:"y",plugins:{legend:{display:false},tooltip:{callbacks:{label:function(i){return " "+brl(i.raw);}}}},scales:{x:{ticks:{color:"#94a3b8",font:{size:12},callback:function(v){return v>=1000?(v/1000).toFixed(0)+"k":v;}},grid:{color:"rgba(37,99,235,.07)"},border:{display:false}},y:{ticks:{color:"#475569",font:{size:13}},grid:{display:false},border:{display:false}}}}});
   var lc=document.getElementById("lC");lc.innerHTML="";
   CL.forEach(function(c,i){lc.innerHTML+="<span style=\"display:flex;align-items:center;gap:6px\"><span style=\"width:10px;height:3px;background:"+cc[i]+";display:inline-block;border-radius:2px\"></span><span style=\"color:#475569\">"+c.n+"</span> <strong style=\"color:#0f172a\">"+((c.v/tC)*100).toFixed(1)+"%</strong></span>";});
   var av2=[].concat(AV).sort(function(a,b){return b.v-a.v;}),tA=av2.reduce(function(a,b){return a+b.v;},0);
@@ -190,7 +190,7 @@ function ini(){
   var apT=AP.reduce(function(a,b){return a+b;},0),mAp=AP.filter(function(v){return v>0;}).length||5;
   document.getElementById("cA3").innerHTML="<div class=\"card ca\"><div class=\"lbl\">Total Aportado 2026</div><div class=\"val blue\">"+brl(apT)+"</div></div><div class=\"card\"><div class=\"lbl\">Media de Aporte</div><div class=\"val\">"+brl(apT/mAp)+"</div><div class=\"sub\">"+mAp+" meses</div></div><div class=\"card\"><div class=\"lbl\">Meses com Aporte</div><div class=\"val\">"+mAp+" <span style=\"font-size:.9rem;color:#94a3b8\">de 12</span></div></div>";
   var tbAp2=document.getElementById("tbAp");tbAp2.innerHTML="";var ac=0;
-  M.forEach(function(mes,i){var v=AP[i]||0;if(v>0)ac+=v;tbAp2.innerHTML+="<tr><td style=\"color:"+(v===0?"#94a3b8":"#0f172a")+"\">"+mes+"</td><td class=\"r\" style=\"color:"+(v>0?"#1d4ed8":"#94a3b8");tbAp2.innerHTML+="\">"+(v>0?brl(v):"--")+"</td><td class=\"r\" style=\"color:"+(v===0?"#94a3b8":"#0f172a")+"\">"+brl(ac)+"</td></tr>";});
+  M.forEach(function(mes,i){var v=AP[i]||0;if(v>0)ac+=v;tbAp2.innerHTML+="<tr><td style=\"color:"+(v===0?"#94a3b8":"#0f172a")+"\">"+mes+"</td><td class=\"r\" style=\"color:"+(v>0?"#1d4ed8":"#94a3b8")+"\">"+(v>0?brl(v):"--")+"</td><td class=\"r\" style=\"color:"+(v===0?"#94a3b8":"#0f172a")+"\">"+brl(ac)+"</td></tr>";});
   tbAp2.innerHTML+="<tr class=\"tt\"><td>Total 2026</td><td class=\"r\">"+brl(apT)+"</td><td class=\"r\">"+brl(apT)+"</td></tr>";
   var tbAl2=document.getElementById("tbAl");tbAl2.innerHTML="";var alT=0;
   ALR.forEach(function(r){var ok=r[7]==="Recebido";if(ok)alT+=r[6];tbAl2.innerHTML+="<tr><td>"+r[0]+"</td><td>"+r[1]+"</td><td>"+r[2]+"</td><td style=\"color:#475569\">"+r[3]+"</td><td class=\"r pos\">"+brl(r[4])+"</td><td class=\"r\">"+r[5]+"</td><td class=\"r "+(ok?"pos":"")+"\"> "+(ok?brl(r[6]):"--")+"</td><td><span class=\""+(ok?"rc":"pr")+"\">"+r[7]+"</span></td></tr>";});
